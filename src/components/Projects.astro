@@ -1,43 +1,67 @@
 ---
-import GitHub from "./icons/GitHub.astro"
-import NextJS from "./icons/NextJS.astro"
-import Tailwind from "./icons/Tailwind.astro"
+import GitHub from "./icons/Github.astro"
+import Angular from "./icons/Angular.astro"
+import Laravel from "./icons/Laravel.astro"
 import Link from "./icons/Link.astro"
 import LinkButton from "./LinkButton.astro"
+import Wordpress from "./icons/Wordpress.astro"
+import Docker from "./icons/Docker.astro"
+import Mysql from "./icons/Mysql.astro"
 
 const TAGS = {
-  NEXT: {
-    name: "Next.js",
+  ANGULAR: {
+    name: "Angular",
     class: "bg-black text-white",
-    icon: NextJS,
+    icon: Angular,
   },
-  TAILWIND: {
-    name: "Tailwind CSS",
+  LARAVEL: {
+    name: "Laravel",
     class: "bg-[#003159] text-white",
-    icon: Tailwind,
+    icon: Laravel,
+  },
+  DOCKER: {
+    name: "Docker",
+    class: "bg-[#003159] text-white",
+    icon: Docker,
+  },
+  WORDPRESS: {
+    name: "Wordpress",
+    class: "bg-black text-white",
+    icon: Wordpress,
+  },
+  MYSQL: {
+    name: "Mysql",
+    class: "bg-[#003159] text-white",
+    icon: Mysql,
   },
 }
 const PROJECTS = [
   {
-    title: "SVGL - A beautiful library with SVG logos",
+    title: "EasyFace - Reconocimiento Facial",
     description:
-      "Biblioteca de logos SVG de las marcas más populares. +10k visitas al mes. +2K svgs descargados. Creado desde cero con Next.js, React y Tailwind CSS.",
-    link: "https://svgl.vercel.app/",
-    github: "https://github.com/pheralb/svgl",
-    image: "/projects/svgl.webp",
-    tags: [TAGS.NEXT, TAGS.TAILWIND],
+      "Software de Reconocimiento Facial, ampliamente utilizado en la industria para el control de acceso de personal.",
+    link: "https://easyface.com.co/",
+    image: "/projects/easyface.webp",
+    tags: [TAGS.LARAVEL, TAGS.ANGULAR, TAGS.MYSQL],
   },
   {
-    title: "AdventJS - Retos de programación con JavaScript y TypeScript",
+    title: "Haro Epico",
     description:
-      "Plataforma gratuita con retos de programación. Más de 1 millón de visitas en un mes. +50K retos completados. Creada desde cero con Next.js, React y Tailwind CSS.",
-    link: "https://adventjs.dev",
-    image: "/projects/adventjs.webp",
-    tags: [TAGS.NEXT, TAGS.TAILWIND],
+      "Proyecto de e-commerce creado desde cero con tecnologias como Wordpress, MySQL y Montado en contenedores Docker",
+    link: "https://haroepico.com",
+    image: "/projects/haroepico.webp",
+    tags: [TAGS.MYSQL, TAGS.WORDPRESS, TAGS.DOCKER],
+  },
+  {
+    title: "Porfolio Web",
+    description:
+      "Proyecto personal en el cual estas navegando actualmente, Usando nuevas tecnologias pensando en mi desarrollo profesional",
+    link: "https://julianquintero.vercel.app",
+    image: "/projects/julianquintero.webp",
+    tags: [TAGS.DOCKER, TAGS.ASTRO],
   },
 ]
 ---
-
 <div class="flex flex-col gap-y-16">
   {
     PROJECTS.map(({ image, title, description, tags, link, github }) => (
