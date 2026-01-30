@@ -1,0 +1,21 @@
+---
+import DotnetIcon from "./icons/Dotnet.astro";
+import TailwindIcon from "./icons/Tailwind.astro";
+import TypeScriptIcon from "./icons/Typescript.astro";
+---
+
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-6 mt-0 justify-items-center">
+  {[
+    
+    { component: TypeScriptIcon, name: "TypeScript" },
+    { component: TailwindIcon, name: "TailwindCSS" },
+    { component: DotnetIcon, name: ".NET" },
+  ].map(({ component: TechIcon, name }) => (
+    <div class="flex flex-col items-center text-center">
+      <div class="bg-gray-200 dark:bg-gray-800 rounded-full p-2 flex items-center justify-center w-16 h-16 hover:scale-110 transition-transform">
+        <TechIcon />
+      </div>
+      <span class="mt-2 text-sm font-medium">{name}</span>
+    </div>
+  ))}
+</div>

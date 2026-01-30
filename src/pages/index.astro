@@ -12,6 +12,7 @@ import Projects from "@/components/Projects.astro"
 import SectionContainer from "@/components/SectionContainer.astro"
 import Hero from "@/components/Hero.astro"
 import TitleSection from "@/components/TitleSection.astro"
+import LearnGrid from "@/components/LearnGrid.astro"
 ---
 
 <Layout
@@ -39,6 +40,14 @@ import TitleSection from "@/components/TitleSection.astro"
         Tecnologías
       </TitleSection>
       <TechGrid />
+    </SectionContainer>
+
+    <SectionContainer id="aprendiendo">
+      <TitleSection>
+        <VsCodeIcon class="size-7" />
+        Aprendiendo...
+      </TitleSection>
+      <LearnGrid />
     </SectionContainer>
 
     <SectionContainer id="proyectos">
