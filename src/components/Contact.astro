@@ -4,8 +4,10 @@ import TitleSection from "./TitleSection.astro"
 import { contact, site, socials } from "@/data/site"
 
 import GitHub from "./icons/GitHub.astro"
+import Gmail from "./icons/Gmail.astro"
 import LinkedIn from "./icons/LinkedIn.astro"
 import Mail from "./icons/Mail.astro"
+import Outlook from "./icons/Outlook.astro"
 
 const ICONS: Record<string, typeof GitHub> = {
   github: GitHub,
@@ -62,9 +64,9 @@ const mailtoUrl = `mailto:${site.email}?subject=${subject}&body=${body}`
         data-cursor="Copiar"
         class="group flex w-full items-center justify-between gap-4 rounded-2xl border border-line/10 bg-bg/60 px-5 py-4 text-left backdrop-blur-sm transition-all duration-300 hover:border-accent/40 hover:bg-bg/90 hover:shadow-lg"
       >
-        <span class="flex items-center gap-3">
-          <span class="grid size-9 place-items-center rounded-xl bg-accent/10 text-accent">
-            <Mail class="size-4" />
+        <span class="flex items-center gap-3.5">
+          <span class="grid size-9 place-items-center rounded-xl bg-accent/10 text-accent transition-transform duration-300 group-hover:scale-110">
+            <Mail class="size-4.5" />
           </span>
           <span class="text-sm font-medium text-fg sm:text-base">{site.email}</span>
         </span>
@@ -76,7 +78,7 @@ const mailtoUrl = `mailto:${site.email}?subject=${subject}&body=${body}`
         </span>
       </button>
 
-      <!-- Botones de acción directa: Redactar en Gmail Web / Outlook Web -->
+      <!-- Botones de acción directa: Redactar en Gmail Web / Outlook Web con sus respectivos iconos -->
       <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
         <a
           href={gmailUrl}
@@ -86,13 +88,18 @@ const mailtoUrl = `mailto:${site.email}?subject=${subject}&body=${body}`
           data-cursor="Gmail"
           class="group flex items-center justify-between gap-3 rounded-2xl bg-accent px-5 py-4 text-accent-contrast shadow-md transition-all duration-300 hover:shadow-accent/25 hover:shadow-lg hover:-translate-y-0.5"
         >
-          <div class="flex flex-col">
-            <span class="font-display text-base font-semibold tracking-tight">
-              Abrir en Gmail
+          <div class="flex items-center gap-3.5">
+            <span class="grid size-9 place-items-center rounded-xl bg-white/20 text-white transition-transform duration-300 group-hover:scale-110">
+              <Gmail class="size-4.5" />
             </span>
-            <span class="font-mono text-[10px] uppercase tracking-wider opacity-85">
-              En tu navegador
-            </span>
+            <div class="flex flex-col">
+              <span class="font-display text-base font-semibold tracking-tight">
+                Abrir en Gmail
+              </span>
+              <span class="font-mono text-[10px] uppercase tracking-wider opacity-85">
+                En tu navegador
+              </span>
+            </div>
           </div>
           <span
             aria-hidden="true"
@@ -109,13 +116,18 @@ const mailtoUrl = `mailto:${site.email}?subject=${subject}&body=${body}`
           data-cursor="Outlook"
           class="group flex items-center justify-between gap-3 rounded-2xl border border-line/10 bg-bg/80 px-5 py-4 text-fg backdrop-blur-sm transition-all duration-300 hover:border-accent/40 hover:bg-bg hover:shadow-md hover:-translate-y-0.5"
         >
-          <div class="flex flex-col">
-            <span class="font-display text-base font-semibold tracking-tight">
-              Abrir en Outlook
+          <div class="flex items-center gap-3.5">
+            <span class="grid size-9 place-items-center rounded-xl bg-accent/10 text-accent transition-transform duration-300 group-hover:scale-110">
+              <Outlook class="size-4.5" />
             </span>
-            <span class="font-mono text-[10px] uppercase tracking-wider text-muted">
-              Outlook Web
-            </span>
+            <div class="flex flex-col">
+              <span class="font-display text-base font-semibold tracking-tight">
+                Abrir en Outlook
+              </span>
+              <span class="font-mono text-[10px] uppercase tracking-wider text-muted">
+                Outlook Web
+              </span>
+            </div>
           </div>
           <span
             aria-hidden="true"
