@@ -1,0 +1,31 @@
+---
+---
+
+<!--
+  Aurora Mesh (Guía §4.3): el canvas pinta los degradados suaves y esta capa
+  superpone la retícula editorial. La retícula usa clases arbitrarias de
+  Tailwind salvo el `mask-image`, que no sobrevive al escaneo y vive aquí.
+-->
+<canvas
+  data-aurora
+  aria-hidden="true"
+  class="pointer-events-none absolute inset-0 h-full w-full opacity-70"
+>
+</canvas>
+
+<div
+  aria-hidden="true"
+  class="aurora-grid pointer-events-none absolute inset-0 opacity-[0.35] dark:opacity-[0.18] [background-image:linear-gradient(to_right,rgb(var(--c-line)/0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgb(var(--c-line)/0.08)_1px,transparent_1px)] [background-size:72px_72px]"
+>
+</div>
+
+<style>
+  .aurora-grid {
+    -webkit-mask-image: radial-gradient(
+      ellipse 70% 60% at 50% 0%,
+      black,
+      transparent 75%
+    );
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black, transparent 75%);
+  }
+</style>

@@ -1,0 +1,82 @@
+/* ==========================================================================
+   Optimización de tipografías y fuentes (Guía §3)
+   - Subconjuntos WOFF2 auto-hospedados (solo latin) + preload en <head>.
+   - font-display: swap con @font-face para evitar FOIT.
+   - Fallback Font Metric Overrides para eliminar el CLS mientras descarga.
+   ========================================================================== */
+
+/* --------------------------------------------------------------- Syne (display) */
+@font-face {
+  font-family: "Syne Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 800;
+  src: url("/fonts/syne-variable-latin.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* --------------------------------------------------------------- Onest (sans) */
+@font-face {
+  font-family: "Onest Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("/fonts/onest-variable-latin.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* -------------------------------------------------------- JetBrains Mono (mono) */
+@font-face {
+  font-family: "JetBrains Mono Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url("/fonts/jetbrains-mono-variable-latin.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ==========================================================================
+   Fallback Font Metric Overrides (Guía §3.B)
+   La fuente de sistema ocupa exactamente el mismo espacio que la fuente web
+   mientras descarga → cero saltos de layout (CLS = 0).
+   ========================================================================== */
+
+@font-face {
+  font-family: "Fallback-Sans";
+  src: local("Arial");
+  ascent-override: 96%;
+  descent-override: 24%;
+  line-gap-override: 0%;
+  size-adjust: 101%;
+}
+
+@font-face {
+  font-family: "Fallback-Display";
+  src: local("Arial");
+  ascent-override: 98%;
+  descent-override: 26%;
+  line-gap-override: 0%;
+  size-adjust: 104%;
+}
+
+/* JetBrains Mono: ascender 1020 / descender 300 sobre unitsPerEm 1000. */
+@font-face {
+  font-family: "Fallback-Mono";
+  src: local("Consolas");
+  ascent-override: 102%;
+  descent-override: 30%;
+  line-gap-override: 0%;
+  size-adjust: 100%;
+}
+
+/* El `font-display: swap` efectivo está declarado en cada @font-face. */
+:root {
+  font-family: "Onest Variable", "Fallback-Sans", system-ui, sans-serif;
+  font-display: swap;
+}

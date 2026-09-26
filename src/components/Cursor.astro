@@ -1,0 +1,32 @@
+<div
+  aria-hidden="true"
+  class="pointer-events-none fixed inset-0 z-[90] hidden [@media(pointer:fine)]:block"
+>
+  <span
+    data-cursor-dot
+    class="absolute left-0 top-0 block size-2 rounded-full bg-accent"
+  >
+  </span>
+  <span
+    data-cursor-ring
+    data-label=""
+    class="absolute left-0 top-0 flex size-10 items-center justify-center rounded-full border border-accent/70 px-1.5 text-center text-[9px] font-medium uppercase leading-tight tracking-wide text-accent-contrast"
+  >
+  </span>
+</div>
+
+<style>
+  [data-cursor-ring],
+  [data-cursor-dot] {
+    opacity: 0;
+  }
+
+  html.has-cursor [data-cursor-ring],
+  html.has-cursor [data-cursor-dot] {
+    opacity: 1;
+  }
+
+  [data-cursor-ring]::after {
+    content: attr(data-label);
+  }
+</style>

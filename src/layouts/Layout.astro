@@ -1,114 +1,264 @@
 ---
-import "@fontsource-variable/onest"
+import "@/styles/fonts.css"
+import "@/styles/performance.css"
 import "flag-icons/css/flag-icons.min.css"
 
-import Header from "../components/Header.astro"
-import Footer from "../components/Footer.astro"
-import { ViewTransitions } from "astro:transitions"
+import Background from "@/components/Background.astro"
+import CommandMenu from "@/components/CommandMenu.astro"
+import Cursor from "@/components/Cursor.astro"
+import Footer from "@/components/Footer.astro"
+import Header from "@/components/Header.astro"
+import Loader from "@/components/Loader.astro"
+import ScrollProgress from "@/components/ScrollProgress.astro"
+import { site } from "@/data/site"
+import ogImage from "@/assets/images/projects/julianquintero.webp"
+import { getImage } from "astro:assets"
 
 interface Props {
-  title: string
-  description: string
+  title?: string
+  description?: string
 }
 
-const { description, title } = Astro.props
+const {
+  title = `${site.shortName} | ${site.role}`,
+  description = "Portafolio de Julián Quintero, Tecnólogo en Desarrollo de Software y Desarrollador Web Full-Stack en Medellín, Colombia. Disponible para freelance y nuevas oportunidades.",
+} = Astro.props
+
+const canonical = new URL(
+  Astro.url.pathname,
+  Astro.site ?? "https://porfolio.dev",
+)
+
+// Imagen social optimizada desde astro:assets (1200x630 WebP).
+const social = await getImage({
+  src: ogImage,
+  width: 1200,
+  height: 630,
+  fit: "cover",
+  format: "webp",
+  quality: 80,
+})
+const socialImage = new URL(social.src, Astro.site ?? "https://porfolio.dev").href
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content={description} />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+
     <title>{title}</title>
-    <ViewTransitions />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical.href} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:image" content={socialImage} />
+    <meta property="og:locale" content="es_CO" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="theme-color" content="#0a0a0b" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f2f0ea" media="(prefers-color-scheme: light)" />
+
+    <!-- Conexiones tempranas a dominios externos -->
+    <link rel="dns-prefetch" href="https://api.github.com" />
+    <link rel="preconnect" href="https://api.open-meteo.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Precarga de recursos críticos -->
+    <link rel="preload" href="/fonts/syne-variable-latin.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href="/fonts/onest-variable-latin.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+
+    <script is:inline>
+      (() => {
+        const stored = localStorage.getItem("theme")
+        const isDark =
+          stored === "dark" ||
+          ((!stored || stored === "system") &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches)
+        document.documentElement.classList.toggle("dark", isDark)
+        document.documentElement.classList.add("js")
+      })()
+    </script>
   </head>
 
-  <body class="relative text-black dark:text-white">
-    <div
-      class="absolute top-0 bottom-0 z-[-2] min-h-screen w-full bg-gray-50 dark:bg-gray-950
-      bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(217,216,255,0.5),rgba(255,255,255,0.9))]
-      dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"
+  <body class="relative min-h-screen overflow-x-clip bg-bg font-sans text-fg antialiased selection:bg-accent selection:text-accent-contrast">
+    <a
+      href="#contenido"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:text-accent-contrast"
+      >Saltar al contenido</a
     >
-    </div>
+
+    <Loader />
+    <Background />
+    <ScrollProgress />
+    <Cursor />
+    <CommandMenu />
+
     <Header />
-    <slot />
+
+    <main id="contenido" class="relative z-10">
+      <slot />
+    </main>
+
     <Footer />
+
     <style is:global>
       :root {
-        color-scheme: light dark;
+        --c-bg: 242 240 234;
+        --c-bg-soft: 232 229 220;
+        --c-surface: 255 255 255;
+        --c-fg: 12 12 14;
+        --c-muted: 92 92 104;
+        --c-line: 12 12 14;
+        --c-accent: 225 29 72;
+        --c-accent-contrast: 255 255 255;
+        --header-h: 4.5rem;
+      }
+
+      .dark {
+        --c-bg: 10 10 11;
+        --c-bg-soft: 20 20 22;
+        --c-surface: 24 24 27;
+        --c-fg: 244 241 234;
+        --c-muted: 160 160 172;
+        --c-line: 244 241 234;
+        --c-accent: 255 69 84;
+        --c-accent-contrast: 10 10 11;
       }
 
       html {
-        font-family: "Onest Variable", "Segoe UI Emoji", system-ui, sans-serif;
-        scroll-behavior: smooth;
+        font-family: "Onest Variable", "Fallback-Sans", system-ui, sans-serif;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      /* ---------- View Transitions (Guía §5.3 y §6.2) ---------- */
+
+      /* Transiciones suaves entre navegaciones internas del mismo origen. */
+      @view-transition {
+        navigation: auto;
+      }
+
+      /* La instantánea nueva no se anima por CSS: en el cambio de tema la
+         controla la onda circular (Web Animations) y en las navegaciones
+         internas basta con que la anterior se desvanezca. */
+      ::view-transition-new(root) {
+        animation: none;
+      }
+
+      ::view-transition-old(root) {
+        animation: vt-fade-out 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      @keyframes vt-fade-out {
+        to {
+          opacity: 0;
+          transform: translateY(-0.4rem);
+        }
       }
 
       body {
-        color: rgba(17, 17, 17, 0.9);
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-        overscroll-behavior: none;
+        text-rendering: optimizeLegibility;
+      }
+
+      /* ---------- Scrollbar ---------- */
+      html {
+        scrollbar-color: rgb(var(--c-muted) / 0.4) transparent;
+        scrollbar-width: thin;
+      }
+
+      ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: rgb(var(--c-muted) / 0.35);
+        border: 3px solid rgb(var(--c-bg));
+        border-radius: 999px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgb(var(--c-accent) / 0.8);
+      }
+
+      /* ---------- Accesibilidad ---------- */
+      :focus-visible {
+        outline: 2px solid rgb(var(--c-accent));
+        outline-offset: 3px;
+        border-radius: 4px;
+      }
+
+      /* ---------- Spotlight (sigue al cursor) ---------- */
+      [data-spotlight] {
+        position: relative;
+        isolation: isolate;
+      }
+
+      [data-spotlight]::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        background: radial-gradient(
+          380px circle at var(--spot-x, 50%) var(--spot-y, 50%),
+          rgb(var(--c-accent) / 0.22),
+          transparent 70%
+        );
+      }
+
+      [data-spotlight]:hover::before {
+        opacity: 1;
+      }
+
+      /* ---------- Lenis ---------- */
+      html.lenis,
+      html.lenis body {
+        height: auto;
+      }
+
+      html.is-loading {
+        overflow: hidden;
+      }
+
+      .lenis.lenis-smooth {
+        scroll-behavior: auto !important;
+      }
+
+      .lenis.lenis-smooth [data-lenis-prevent] {
+        overscroll-behavior: contain;
+      }
+
+      .lenis.lenis-stopped {
+        overflow: hidden;
       }
 
       @media (prefers-reduced-motion: reduce) {
         html {
           scroll-behavior: auto;
         }
-      }
 
-      @media (prefers-color-scheme: dark) {
-        body {
-          color: rgba(255, 255, 255, 0.9);
-        }
-      }
-
-      #header-nav {
-        animation: blur linear both 0.5s;
-        animation-timeline: scroll();
-        animation-range: 0 500px;
-      }
-
-      @keyframes blur {
-        to {
-          backdrop-filter: blur(20px);
-          border-width: 1px;
-          border-color: rgba(0, 0, 0);
-          padding: 0.25rem 0.75rem;
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          background-color: rgb(229, 229, 229);
-          border-radius: 9999px;
-        }
-      }
-
-      @media (prefers-color-scheme: dark) {
-        @keyframes blur {
-          from {
-            border: 0px;
-          }
-          to {
-            box-shadow:
-              0px 5px 50px -5px rgba(0, 0, 0, 0.1),
-              0px 0px 0 1px rgba(0, 0, 0, 0.3);
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(20px);
-            border-width: 1px;
-            border-color: rgba(0, 0, 0);
-            padding-left: 0.75rem;
-            padding-right: 0.75rem;
-            padding-top: 0.25rem;
-            padding-bottom: 0.25rem;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            background-color: rgba(0, 0, 0, 0.3);
-            border-radius: 9999px;
-          }
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
         }
       }
     </style>

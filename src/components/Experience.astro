@@ -1,37 +1,61 @@
 ---
+import TitleSection from "./TitleSection.astro"
 import ExperienceItem from "./ExperienceItem.astro"
-const EXPERIENCE = [
-  {
-    date: "Actualmente",
-    title: "Analista de Soporte TI",
-    company: "Ingeneo S.A.S",
-    description:
-      "Responsable de implementar flujos de chatbot, soporte tecnico de primer nivel, y mantenimiento de sistemas internos. Colaboración con equipos de desarrollo para mejorar la eficiencia operativa y la experiencia del usuario.",
-    link: "https://ingeneo.com.co/",
-  },
-  {
-    date: "Enero 2026",
-    title: "Practicante en Analisis y Desarrollo de Software",
-    company: "Ingeneo S.A.S",
-    description:
-      "Desarrollo y Soporte de aplicaciones web utilizando tecnologías robustas como Angular, Laravel y bases de datos SQL. Implementando prácticas de SCRUM para mejorar la eficiencia del equipo y la calidad del software entregado.",
-  },
-  {
-    date: "Junio 2025",
-    title: "Desarrollador Freelance",
-    company: "Freelance",
-    description:
-      "Responsable de la creación y desarrollo de aplicaciones web. Montaje y despliegue de aplicaciones en servidores y con tecnologias como docker y wordpress. Colaboración directa con clientes para entender sus necesidades y entregar soluciones personalizadas.",
-  },
-]
+import { experience } from "@/data/site"
 ---
 
-<ol class="relative mt-16">
-  {
-    EXPERIENCE.map((experience) => (
-      <li class="">
-        <ExperienceItem {...experience} />
-      </li>
-    ))
-  }
-</ol>
+<section
+  id="experiencia"
+  data-section="experiencia"
+  class="relative mx-auto w-full max-w-[1400px] scroll-mt-24 px-4 py-24 sm:px-6 sm:py-32 lg:px-10 xl:max-w-[1560px]"
+>
+  <TitleSection
+    index="02"
+    kicker="Trayectoria"
+    title="Experiencia laboral"
+  />
+
+  <div data-timeline class="relative mt-16">
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-y-0 left-0 hidden w-4 md:block"
+    >
+      <svg
+        class="absolute inset-y-0 left-0 h-full w-4 overflow-visible"
+        viewBox="0 0 16 1000"
+        preserveAspectRatio="none"
+        fill="none"
+      >
+        <line
+          x1="8"
+          y1="0"
+          x2="8"
+          y2="1000"
+          stroke="rgb(var(--c-line) / 0.12)"
+          stroke-width="2"
+          vector-effect="non-scaling-stroke"
+        >
+        </line>
+        <path
+          id="timeline-path"
+          d="M8 0 V 1000"
+          stroke="rgb(var(--c-accent) / 1)"
+          stroke-width="2"
+          stroke-linecap="round"
+          vector-effect="non-scaling-stroke"
+        >
+        </path>
+      </svg>
+    </div>
+
+    <ol class="space-y-2">
+      {
+        experience.map((item) => (
+          <li data-timeline-item>
+            <ExperienceItem {...item} />
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

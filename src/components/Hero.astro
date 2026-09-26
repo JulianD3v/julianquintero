@@ -1,48 +1,262 @@
 ---
-const personalImageAlt = "Julián Quintero"
-import Badge from "@/components/Badge.astro"
-import LinkedInIcon from "@/components/icons/LinkedIn.astro"
-import MailIcon from "@/components/icons/Mail.astro"
-import SocialPill from "@/components/SocialPill.astro"
+import { Image, getImage } from "astro:assets"
+import Badge from "./Badge.astro"
+import BrandIcon from "./BrandIcon.astro"
+import RotatingBadge from "./RotatingBadge.astro"
+import LinkedIn from "./icons/LinkedIn.astro"
+import Mail from "./icons/Mail.astro"
+import { hero, site, socials } from "@/data/site"
+import myPortrait from "@/assets/images/me.webp"
+import { buildLqip } from "@/lib/images"
+
+const portraitLqip = await buildLqip(myPortrait)
+
+// La misma transformación que usa <Image> abajo, para poder precargar el
+// recurso ya optimizado. En móvil el retrato queda bajo el pliegue y la carga
+// diferida gana, por eso la precarga se limita a la vista ancha.
+const portraitPreload = await getImage({
+  src: myPortrait,
+  width: 460,
+  height: 575,
+  format: "avif",
+  quality: 85,
+})
+
+const ICONS: Record<string, typeof LinkedIn> = {
+  linkedin: LinkedIn,
+  mail: Mail,
+}
 ---
 
-<div class="max-w-xl">
-  <div class="flex gap-4 mb-4">
-    <img
-      class="rounded-full shadow-lg size-36"
-      src="/julian.webp"
-      alt={personalImageAlt}
-    />
-    <a
-      href="https://www.linkedin.com/in/julian-quintero-8156771bb/"
-      target="_blank"
-      rel="noopener"
-      class="flex items-center transition md:justify-center md:hover:scale-105"
-    >
-      <Badge>Disponible para trabajar</Badge>
-    </a>
+<!-- El retrato es el LCP en escritorio: se precarga solo cuando puede estar
+     en el primer viewport, para no gastar ancho de banda en móvil. -->
+<link
+  rel="preload"
+  as="image"
+  href={portraitPreload.src}
+  type="image/avif"
+  media="(min-width: 1024px)"
+  fetchpriority="high"
+/>
+
+
+<section
+  data-hero
+  class="relative flex min-h-[100svh] items-center overflow-hidden pb-16 pt-24 sm:pt-28"
+>
+  <div
+    data-hero-glow
+    aria-hidden="true"
+    class="hero-glow pointer-events-none absolute left-1/2 top-1/3 -z-10 h-[70vmax] w-[70vmax] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgb(var(--c-accent)/0.16),transparent_62%)] blur-3xl"
+  >
   </div>
-  <h1
-    class="text-4xl font-bold tracking-tight text-gray-800 sm:text-5xl dark:text-white"
+
+  <div data-hero-content class="mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-10 xl:max-w-[1560px]">
+    <div
+      data-hero-item
+      class="flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[11px] uppercase tracking-[0.18em] text-muted"
+    >
+      <Badge />
+      <span class="hidden h-px w-8 bg-line/20 sm:block"></span>
+      <span>{hero.kicker}</span>
+      <span class="hidden h-px w-8 bg-line/20 sm:block"></span>
+      <span class="flex items-center gap-1.5">
+        {/*
+          El reloj se rellena por JS. El placeholder mide exactamente lo mismo
+          que "HH:MM" en una monoespaciada, así no cambia el ancho al pintar y
+          el hero no salta (CLS) cuando entra la hora.
+        */}
+        <span data-clock data-timezone={site.timezone} class="text-accent"
+          >--:--</span
+        >
+        hora local
+      </span>
+    </div>
+
+    <h1 class="mt-6 font-display text-display font-semibold">
+      {
+        hero.headline.map((line) => (
+          <span data-split="intro" class="block overflow-hidden pb-[0.08em] -mb-[0.08em]">
+            <span data-split-inner class="block">{line}</span>
+          </span>
+        ))
+      }
+      <span
+        data-split="intro"
+        class="block overflow-hidden pb-[0.08em] -mb-[0.08em] text-accent"
+      >
+        <span data-split-inner class="block">{hero.headlineAccent}</span>
+      </span>
+    </h1>
+
+    <div class="mt-10 grid items-end gap-x-10 gap-y-10 lg:grid-cols-[1.05fr_0.95fr]">
+      <div class="flex flex-col gap-6">
+        <p
+          data-hero-item
+          set:html={hero.lead}
+          class="max-w-xl text-pretty text-lg text-muted sm:text-xl [&>strong]:font-semibold [&>strong]:text-fg"
+        >
+        </p>
+
+        <div data-hero-item class="flex flex-wrap items-center gap-3">
+          <a
+            href="/#contacto"
+            data-magnetic="0.3"
+            data-cursor="Escríbeme"
+            class="group inline-flex items-center gap-3 rounded-full bg-fg px-6 py-3.5 text-sm font-semibold text-bg transition-colors duration-300 hover:bg-accent hover:text-accent-contrast"
+          >
+            Hablemos
+            <span
+              aria-hidden="true"
+              class="transition-transform duration-300 group-hover:translate-x-1"
+              >→</span
+            >
+          </a>
+
+          <a
+            href="/#proyectos"
+            data-magnetic="0.3"
+            class="group inline-flex items-center gap-2 rounded-full border border-line/15 px-6 py-3.5 text-sm font-semibold text-fg transition-colors duration-300 hover:border-accent hover:text-accent"
+          >
+            Ver proyectos
+          </a>
+        </div>
+
+        <div
+          data-hero-item
+          class="flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-[11px] uppercase tracking-[0.14em] text-muted"
+        >
+          <span>Encuéntrame en</span>
+          <span class="flex items-center gap-2">
+              {
+                socials.map((social) => {
+                  const Icon = ICONS[social.icon]
+                  return (
+                    <a
+                      href={social.href}
+                      target={social.icon === "mail" ? undefined : "_blank"}
+                      rel="noopener noreferrer"
+                      aria-label={social.label}
+                      data-magnetic="0.4"
+                      data-cursor={social.label}
+                      class="grid size-9 place-items-center rounded-full border border-line/10 transition-colors duration-300 hover:border-accent hover:text-accent"
+                    >
+                      {social.icon === "github" ? (
+                        <BrandIcon slug="github" class="size-4" />
+                      ) : (
+                        <Icon class="size-4" />
+                      )}
+                    </a>
+                  )
+                })
+              }
+          </span>
+        </div>
+
+        <dl
+          data-hero-item
+          class="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line/10 bg-line/10 sm:grid-cols-4"
+        >
+          {
+            hero.stats.map((stat) => (
+              <div class="flex flex-col-reverse gap-1 bg-bg/60 px-4 py-3 backdrop-blur-sm">
+                <dt class="font-mono text-[10px] uppercase leading-tight tracking-[0.12em] text-muted">
+                  {stat.label}
+                </dt>
+                <dd class="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+                  <span data-counter={stat.value}>{stat.value}</span>
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+
+      <div data-hero-item class="relative mx-auto w-full max-w-[17rem] sm:max-w-[18rem] lg:max-w-[min(19rem,30vh)]">
+        <div
+          data-hero-portrait
+          class="relative aspect-[4/5] w-full overflow-hidden rounded-[1.75rem] border border-line/10 bg-bg-soft shadow-[0_40px_120px_-40px_rgb(0_0_0/0.45)]"
+        >
+          <span
+            aria-hidden="true"
+            class="absolute inset-0 scale-110 bg-cover bg-center blur-xl"
+            style={`background-image:url("${portraitLqip}")`}
+          >
+          </span>
+          <Image
+            src={myPortrait}
+            alt={`${site.name}, ${site.role}`}
+            width={460}
+            height={575}
+            widths={[272, 345, 460]}
+            sizes="(min-width: 1024px) 19rem, (min-width: 640px) 18rem, 17rem"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+            format="avif"
+            quality={80}
+            class="absolute inset-0 size-full object-cover object-top"
+          />
+          <div
+            aria-hidden="true"
+            class="absolute inset-0 bg-[linear-gradient(to_top,rgb(var(--c-bg)/0.85),transparent_50%)]"
+          >
+          </div>
+          <span
+            class="absolute right-3 top-3 z-10 inline-flex items-center gap-1.5 rounded-full border border-line/10 bg-bg/80 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.14em] text-fg backdrop-blur-md shadow-sm"
+          >
+            <span class="relative flex size-1.5">
+              <span class="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-75"></span>
+              <span class="relative inline-flex size-1.5 rounded-full bg-accent"></span>
+            </span>
+            {hero.rotating[0]}
+          </span>
+          <div
+            aria-hidden="true"
+            class="absolute inset-x-0 bottom-0 flex flex-col gap-1.5 p-4"
+          >
+            <p
+              class="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-muted"
+            >
+              <span class="fi fi-co"></span>
+              {site.location}
+            </p>
+            <p class="font-display text-sm font-semibold leading-tight">
+              {site.title}
+            </p>
+          </div>
+        </div>
+
+        <RotatingBadge
+          class="absolute -bottom-6 -right-6 z-20 size-20 sm:-bottom-8 sm:-right-8 sm:size-24 text-fg drop-shadow-md"
+          text={`${hero.rotating[0]} · ${hero.rotating[1]} · `}
+        />
+      </div>
+    </div>
+  </div>
+
+  <div
+    data-hero-cue
+    class="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-muted md:flex"
   >
-    Hey, soy Julian Quintero
-  </h1>
-  <p
-    class="mt-6 text-xl text-gray-800 dark:[&>strong]:text-yellow-200 [&>strong]:text-yellow-500 [&>strong]:font-semibold dark:text-gray-300"
-  >
-    +1 año de experiencia. <strong
-      >Tecnólogo en Desarrollo de Software y Desarrollador Web</strong
-    > de Medellín, Colombia <span class="fi fi-co w-5 h-4"></span>. Especializado en el desarrollo de aplicaciones web
-    únicas y escalables.
-  </p>
-  <nav class="flex flex-wrap gap-4 mt-8">
-    <SocialPill href="https://mail.google.com/mail/?view=cm&to=julianquinterortiz@gmail.com&su=Conozcamonos&body=Hola,%20me%20gustar%C3%ADa%20contactarte%20para%20...">
-      <MailIcon class="size-4" />
-      julianquinterortiz@gmail.com
-    </SocialPill>
-    <SocialPill href="https://www.linkedin.com/in/julian-quintero-8156771bb/">
-      <LinkedInIcon class="size-4" />
-      LinkedIn
-    </SocialPill>
-  </nav>
-</div>
+    Scroll
+    <span class="relative block h-10 w-px overflow-hidden bg-line/15">
+      <span class="cue-bar absolute inset-x-0 top-0 block h-1/2 bg-accent"></span>
+    </span>
+  </div>
+</section>
+
+<style>
+  @keyframes cue {
+    0% {
+      transform: translateY(-110%);
+    }
+    100% {
+      transform: translateY(220%);
+    }
+  }
+
+  .cue-bar {
+    animation: cue 1.8s ease-in-out infinite;
+  }
+</style>

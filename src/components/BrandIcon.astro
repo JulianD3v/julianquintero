@@ -1,0 +1,68 @@
+---
+/**
+ * Iconos de marca oficiales de Simple Icons (simpleicons.org, licencia CC0).
+ * Se renderizan en tiempo de build: SVG en línea, sin peticiones extra.
+ */
+import {
+  siAngular,
+  siAstro,
+  siBootstrap,
+  siCss,
+  siDocker,
+  siDotnet,
+  siGithub,
+  siHtml5,
+  siJavascript,
+  siLaravel,
+  siMysql,
+  siNextdotjs,
+  siNodedotjs,
+  siOpenjdk,
+  siTailwindcss,
+  siTypescript,
+  siWordpress,
+} from "simple-icons"
+
+const ICONS = {
+  angular: siAngular,
+  astro: siAstro,
+  bootstrap: siBootstrap,
+  css: siCss,
+  docker: siDocker,
+  dotnet: siDotnet,
+  github: siGithub,
+  html: siHtml5,
+  javascript: siJavascript,
+  laravel: siLaravel,
+  mysql: siMysql,
+  nextjs: siNextdotjs,
+  nodejs: siNodedotjs,
+  java: siOpenjdk,
+  tailwind: siTailwindcss,
+  typescript: siTypescript,
+  wordpress: siWordpress,
+} as const
+
+export type BrandSlug = keyof typeof ICONS
+
+interface Props {
+  slug: BrandSlug
+  class?: string
+  title?: string
+}
+
+const { slug, class: className, title } = Astro.props
+const icon = ICONS[slug]
+---
+
+<svg
+  viewBox="0 0 24 24"
+  role={title ? "img" : undefined}
+  aria-label={title}
+  aria-hidden={title ? undefined : "true"}
+  class={className}
+  style={`--brand:#${icon.hex}`}
+  fill="currentColor"
+>
+  <path d={icon.path}></path>
+</svg>

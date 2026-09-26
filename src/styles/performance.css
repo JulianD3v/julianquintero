@@ -1,0 +1,42 @@
+/* ==========================================================================
+   Contención CSS y capas GPU (Guía §2.D)
+   - `contain: layout style paint` evita repaints en cascada en tarjetas
+     repetitivas y recorta el desbordamiento al propio borde.
+   - `will-change` se aplica SOLO durante las transiciones activas para no
+     agotar la memoria de vídeo del navegador.
+   ========================================================================== */
+
+[data-horizontal-card],
+[data-spotlight],
+.hero-glow {
+  contain: layout style paint;
+}
+
+.will-change-transform {
+  will-change: transform;
+}
+
+/* Reflejo especular de las tarjetas 3D: necesita su propia capa compuesta. */
+[data-tilt-glow] {
+  will-change: opacity;
+  transform: translateZ(0);
+}
+
+/* Perspectiva del scope 3D: contenedor padre de cualquier [data-tilt]. */
+[data-tilt-scope] {
+  perspective: 1100px;
+  perspective-origin: 50% 50%;
+}
+
+/* El fondo aurora es un canvas a pantalla completa: capa GPU dedicada. */
+[data-aurora] {
+  contain: strict;
+  transform: translateZ(0);
+}
+
+/* La textura de grano no debe provocar recomposiciones al hacer scroll. */
+[data-grain] {
+  contain: strict;
+  pointer-events: none;
+  transform: translateZ(0);
+}

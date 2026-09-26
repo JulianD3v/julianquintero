@@ -1,12 +1,31 @@
 ---
-const { href } = Astro.props;
+interface Props {
+  href: string
+  variant?: "solid" | "ghost" | "accent"
+  class?: string
+  target?: string
+}
+
+const {
+  href,
+  variant = "ghost",
+  class: className = "",
+  target = "_blank",
+} = Astro.props
+
+const variants: Record<string, string> = {
+  solid: "bg-fg text-bg hover:bg-accent hover:text-accent-contrast",
+  ghost: "border border-line/15 text-fg hover:border-accent hover:text-accent",
+  accent: "bg-accent text-accent-contrast hover:brightness-110",
+}
 ---
 
 <a
-    target="_blank"
-    href={href}
-    role="link"
-    class="inline-flex bg-gray-100 text-gray-800 border-gray-300 items-center justify-center gap-2 px-3 py-2 space-x-2 text-base transition dark:text-white dark:bg-gray-800 border dark:border-gray-600 focus-visible:ring-yellow-500/80 text-md hover:bg-gray-800 hover:border-gray-900 group max-w-fit rounded-xl hover:text-white focus:outline-none focus-visible:outline-none focus-visible:ring focus-visible:ring-white focus-visible:ring-offset-2 active:bg-black"
+  href={href}
+  target={target}
+  rel="noopener noreferrer"
+  role="link"
+  class={`group inline-flex max-w-fit items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold transition-colors duration-300 ${variants[variant]} ${className}`}
 >
-    <slot />
+  <slot />
 </a>

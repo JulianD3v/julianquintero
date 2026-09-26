@@ -1,28 +1,146 @@
 ---
-const currentYear = new Date().getFullYear()
+import { nav, site, socials } from "@/data/site"
+
+const year = new Date().getFullYear()
 ---
 
 <footer
-  class="opacity-80 m-4 min-[375px]:pl-4 md:pl-0 mt-16 w-full mx-auto container lg:max-w-4xl md:max-w-2xl mb-10 flex justify-center"
+  class="relative mt-10 border-t border-line/10 bg-bg/60 backdrop-blur-sm"
 >
-  <div
-    class="rounded-lg w-full max-w-screen-xl mx-auto md:flex md:items-center md:justify-between py-4"
-  >
-    <span class="text-sm sm:text-center text-zinc-800/90 dark:text-zinc-200/90"
-      >&copy; {currentYear}
-      <a href="https://github.com/JulianD3v" class="hover:underline">Julian Quintero</a>. Todos los derechos reservados
-    </span>
-    <ul
-      class="flex flex-wrap items-center mt-3 text-sm font-medium dark:text-white/90 sm:mt-0"
-    >
-      <li>
-        <a href="/#sobre-mi" class="hover:underline me-4 md:me-6">Sobre mí</a>
-      </li>
-      <li>
-        <a id="contacto" href="mailto:julianquinterortiz@gmail.com" class="hover:underline"
-          >Contacto</a
+  <div class="mx-auto w-full max-w-[1680px] px-4 py-14 sm:px-6 lg:px-10">
+    <div class="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr]">
+      <div class="space-y-5">
+        <a
+          href="/#contenido"
+          class="group inline-flex items-center gap-3 font-display text-2xl font-semibold tracking-tight"
         >
-      </li>
-    </ul>
+          <span
+            class="grid size-9 place-items-center rounded-full bg-fg text-[13px] text-bg transition-transform duration-500 group-hover:rotate-[18deg]"
+          >
+            JQ
+          </span>
+          {site.name}
+        </a>
+        <p class="max-w-sm text-sm text-pretty text-muted">
+          {site.role} en {site.location}. Construyo productos web únicos y
+          escalables, de la base de datos a la interfaz.
+        </p>
+      </div>
+
+      <nav aria-label="Navegación del pie" class="space-y-4">
+        <p
+          class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted"
+        >
+          Navegación
+        </p>
+        <ul class="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
+          {
+            nav.map((item) => (
+              <li>
+                <a
+                  href={item.url}
+                  class="text-muted transition-colors hover:text-accent"
+                >
+                  {item.title}
+                </a>
+              </li>
+            ))
+          }
+          <li>
+            <a
+              href={site.cv.page}
+              data-cursor="Abrir"
+              class="inline-flex items-center gap-1 text-muted transition-colors hover:text-accent"
+            >
+              Hoja de vida
+              <span aria-hidden="true">↗</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href={site.cv.pdf}
+              download
+              data-cursor="PDF"
+              class="inline-flex items-center gap-1 text-muted transition-colors hover:text-accent"
+            >
+              Descargar CV
+              <span aria-hidden="true">↓</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="space-y-4">
+        <p
+          class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted"
+        >
+          Redes
+        </p>
+        <ul class="space-y-2 text-sm">
+          {
+            socials.map((social) => (
+              <li>
+                <a
+                  href={social.href}
+                  target={social.icon === "mail" ? undefined : "_blank"}
+                  rel="noopener noreferrer"
+                  class="group inline-flex items-center gap-2 text-muted transition-colors hover:text-accent"
+                >
+                  <span
+                    class="h-px w-3 bg-current transition-all duration-300 group-hover:w-6"
+                    aria-hidden="true"
+                  />
+                  {social.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div
+      class="mt-14 flex flex-col-reverse items-start justify-between gap-6 border-t border-line/10 pt-6 font-mono text-[10px] uppercase tracking-[0.16em] text-muted sm:flex-row sm:items-center"
+    >
+      <p>© {year} {site.name}. Todos los derechos reservados.</p>
+      <p class="flex items-center gap-4">
+        <span>Hecho con Astro + GSAP</span>
+        <a
+          href="#contenido"
+          data-cursor="Arriba"
+          class="group inline-flex items-center gap-2 transition-colors hover:text-accent"
+        >
+          Volver arriba
+          <span
+            class="transition-transform duration-300 group-hover:-translate-y-0.5"
+            aria-hidden="true"
+            >↑</span
+          >
+        </a>
+      </p>
+    </div>
   </div>
+
+  <!--
+    La marca de agua va en SVG y no en texto: el contraste de un texto tan
+    tenue nunca cumpliría el ratio de WCAG, y como decoración no debe leerse.
+  -->
+  <svg
+    aria-hidden="true"
+    focusable="false"
+    class="pointer-events-none block w-full select-none px-4 text-fg/[0.06]"
+    viewBox="0 0 1200 132"
+    preserveAspectRatio="none"
+    height="132"
+  >
+    <text
+      x="600"
+      y="106"
+      text-anchor="middle"
+      fill="currentColor"
+      style="font-family:'Syne Variable',system-ui,sans-serif;font-size:134px;font-weight:800;letter-spacing:-0.04em"
+    >
+      Julian Quintero
+    </text>
+  </svg>
 </footer>

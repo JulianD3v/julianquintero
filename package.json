@@ -8,16 +8,31 @@
     "build": "astro build",
     "check": "astro check",
     "preview": "astro preview",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "cv": "node scripts/cv-pdf.mjs",
     "astro": "astro"
   },
   "dependencies": {
     "@astrojs/check": "0.5.6",
     "@astrojs/tailwind": "5.1.0",
-    "@fontsource-variable/onest": "5.0.2",
     "astro": "4.4.5",
     "astro-robots-txt": "1.0.0",
     "flag-icons": "^7.5.0",
+    "gsap": "^3.15.0",
+    "lenis": "^1.1.18",
+    "sharp": "0.32.6",
+    "simple-icons": "^16.32.0",
     "tailwindcss": "3.4.1",
     "typescript": "5.3.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-astro": "^1.2.0",
+    "vitest": "^1.6.0"
   }
 }

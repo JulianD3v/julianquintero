@@ -1,0 +1,20 @@
+---
+import TechGrid from "./TechGrid.astro"
+import TitleSection from "./TitleSection.astro"
+---
+
+<section
+  id="stack"
+  data-section="stack"
+  class="relative mx-auto w-full max-w-[1400px] scroll-mt-24 px-4 xl:max-w-[1560px] py-24 sm:px-6 sm:py-32 lg:px-10"
+>
+  <TitleSection
+    index="04"
+    kicker="Herramientas"
+    title="Tecnologías que uso a diario"
+  />
+
+  <div class="mt-14 grid gap-5 lg:grid-cols-3">
+    <TechGrid />
+  </div>
+</section>

@@ -1,110 +1,187 @@
 ---
 import ThemeToggle from "./ThemeToggle.astro"
-
-const navItems = [
-  {
-    title: "Experiencia",
-    label: "experiencia",
-    url: "/#experiencia",
-  },
-  {
-    title: "Tecnologías",
-    label: "tecnologias",
-    url: "/#tecnologias"
-  },
-  {
-    title: "Proyectos",
-    label: "proyectos",
-    url: "/#proyectos",
-  },
-  {
-    title: "Sobre mí",
-    label: "sobre-mi",
-    url: "/#sobre-mi",
-  },
-]
+import { nav, site } from "@/data/site"
 ---
 
-<header
-  class="fixed top-0 z-10 flex items-center justify-center w-full mx-auto mt-2"
->
-  <nav
-    class="flex px-3 text-sm font-medium rounded-full text-gray-600 dark:text-gray-200 justify-center items-center"
-  >
-    {
-      navItems.map((link) => (
-        <a
-          class="relative block px-2 py-2 transition hover:text-blue-500 dark:hover:text-blue-500"
-          aria-label={link.label}
-          href={link.url}
+<header data-header class="fixed inset-x-0 top-0 z-[80]">
+  <div data-header-bar class="w-full">
+    <div
+      class="mx-auto flex h-16 w-full max-w-[1680px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-10"
+    >
+      <a
+        href="/#contenido"
+        title="Inicio"
+        class="group flex items-center gap-2 font-display text-base font-semibold tracking-tight"
+      >
+        <span
+          class="grid size-8 place-items-center rounded-full bg-fg text-bg transition-transform duration-500 group-hover:rotate-[18deg]"
         >
-          {link.title}
+          <span class="text-[13px] leading-none">JQ</span>
+        </span>
+        <span class="hidden sm:inline">Julian<span
+          class="text-muted transition-colors group-hover:text-accent">Dev</span
+          ></span>
+      </a>
+
+      <nav
+        aria-label="Navegación principal"
+        class="relative hidden items-center rounded-full border border-line/10 bg-bg/60 p-1 backdrop-blur-xl md:flex"
+      >
+        <span
+          data-nav-indicator
+          aria-hidden="true"
+          class="absolute bottom-1 left-0 top-1 rounded-full bg-fg/[0.07] ring-1 ring-line/10 dark:bg-white/[0.09]"
+        >
+        </span>
+        {
+          nav.map((item) => (
+            <a
+              data-nav-link
+              data-nav-id={item.label}
+              href={item.url}
+              aria-label={item.label}
+              class="nav-link relative z-10 rounded-full px-4 py-1.5 text-sm font-medium text-muted transition-colors duration-300 hover:text-fg"
+            >
+              {item.title}
+            </a>
+          ))
+        }
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <button
+          type="button"
+          data-command-open
+          aria-haspopup="dialog"
+          aria-expanded="false"
+          aria-label="Abrir la paleta de comandos"
+          data-cursor="Buscar"
+          class="hidden items-center gap-2 rounded-full border border-line/10 py-1.5 pl-3 pr-2 text-xs text-muted transition-colors duration-300 hover:border-accent/40 hover:text-fg lg:inline-flex"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            class="size-3.5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <circle cx="11" cy="11" r="6.5"></circle>
+            <path d="m16 16 4 4"></path>
+          </svg>
+          <span data-command-hint class="font-mono tracking-[0.08em]">⌘K</span>
+        </button>
+
+        <a
+          href="/#contacto"
+          data-magnetic="0.25"
+          class="group hidden items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-semibold text-accent-contrast transition-transform duration-300 hover:gap-3 sm:inline-flex"
+        >
+          Hablemos
+          <span class="transition-transform duration-300 group-hover:translate-x-0.5"
+            >→</span
+          >
         </a>
-      ))
-    }
-    <ThemeToggle />
-  </nav>
+
+        <ThemeToggle />
+
+        <button
+          data-menu-button
+          type="button"
+          aria-expanded="false"
+          aria-controls="menu-movil"
+          aria-label="Abrir menú"
+          class="grid size-9 place-items-center rounded-full border border-line/10 text-fg transition-colors hover:bg-fg/5 md:hidden"
+        >
+          <span class="relative block h-3 w-4">
+            <span class="bar bar-1 absolute left-0 top-0 h-px w-4 bg-current"></span>
+            <span class="bar bar-2 absolute left-0 top-[5px] h-px w-4 bg-current"></span>
+            <span class="bar bar-3 absolute left-0 top-[10px] h-px w-4 bg-current"></span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div
+    id="menu-movil"
+    data-mobile-menu
+    class="invisible fixed inset-0 -z-10 flex flex-col justify-between bg-bg/95 px-5 pb-8 pt-24 opacity-0 backdrop-blur-2xl md:hidden"
+  >
+    <nav aria-label="Navegación móvil" class="flex flex-col">
+      {
+        nav.map((item, index) => (
+          <div class="overflow-hidden border-b border-line/10">
+            <a
+              data-menu-item
+              data-nav-id={item.label}
+              href={item.url}
+              class="flex items-baseline justify-between gap-4 py-4 font-display text-3xl font-semibold tracking-tight sm:text-4xl"
+            >
+              {item.title}
+              <span class="font-mono text-[11px] text-muted">
+                0{index + 1}
+              </span>
+            </a>
+          </div>
+        ))
+      }
+    </nav>
+
+    <div class="space-y-4">
+      <a
+        href={`mailto:${site.email}`}
+        class="flex items-center justify-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-semibold text-accent-contrast"
+      >
+        {site.email}
+      </a>
+      <p
+        class="text-center font-mono text-[11px] uppercase tracking-[0.2em] text-muted"
+      >
+        Medellín, Colombia · <span data-clock data-timezone="America/Bogota"
+          >--:--</span
+        >
+      </p>
+      <button
+        type="button"
+        data-command-open
+        aria-haspopup="dialog"
+        aria-expanded="false"
+        class="mx-auto flex items-center gap-2 rounded-full border border-line/10 px-4 py-2 text-sm text-muted"
+      >
+        Buscar en el portafolio
+        <span data-command-hint class="font-mono text-[10px]">⌘K</span>
+      </button>
+    </div>
+  </div>
 </header>
 
-<script>
-  document.addEventListener("astro:page-load", () => {
-    const sections = document.querySelectorAll("section")
-    const navItems = document.querySelectorAll("header nav a")
-
-    const callback = (entries: any[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          navItems.forEach((item) => {
-            if (item.getAttribute("aria-label") == entry.target.id) {
-              item.classList.add("text-blue-500")
-            } else {
-              item.classList.remove("text-blue-500")
-            }
-          })
-        }
-      })
-    }
-
-    const observer = new IntersectionObserver(callback, {
-      root: null,
-      rootMargin: "0px",
-      threshold: 0.3,
-    })
-
-    sections.forEach((section) => {
-      observer.observe(section)
-    })
-
-    // Cleanup function
-    document.onvisibilitychange = () => {
-      if (document.visibilityState === "hidden") {
-        observer.disconnect()
-      } else {
-        sections.forEach((section) => {
-          observer.observe(section)
-        })
-      }
-    }
-  })
-</script>
-
 <style>
-  nav {
-    animation: nav-shadown 1s linear both;
-    animation-timeline: scroll();
-    animation-range: 0 100px;
+  .nav-link.is-active {
+    color: rgb(var(--c-fg));
   }
 
-  nav {
-    @apply dark:bg-gray-800/90 bg-white/50;
+  header.is-scrolled [data-header-bar] > div {
+    background-color: rgb(var(--c-bg) / 0.72);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgb(var(--c-line) / 0.06);
   }
 
-  @keyframes nav-shadown {
-    0% {
-      @apply dark:bg-gray-800/0 bg-white/0;
-    }
-    to {
-      @apply shadow-lg ring-1 backdrop-blur ring-white/10;
-    }
+  .bar {
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.2s linear;
+  }
+
+  header.menu-open .bar-1 {
+    transform: translateY(5px) rotate(45deg);
+  }
+
+  header.menu-open .bar-2 {
+    opacity: 0;
+  }
+
+  header.menu-open .bar-3 {
+    transform: translateY(-5px) rotate(-45deg);
   }
 </style>

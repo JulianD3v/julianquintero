@@ -1,123 +1,56 @@
 ---
-import GitHub from "./icons/GitHub.astro"
-import Angular from "./icons/Angular.astro"
-import Laravel from "./icons/Laravel.astro"
-import Link from "./icons/Link.astro"
-import LinkButton from "./LinkButton.astro"
-import Wordpress from "./icons/Wordpress.astro"
-import Docker from "./icons/Docker.astro"
-import Mysql from "./icons/Mysql.astro"
-import AstroIcon from "./icons/Astro.astro"
-
-const TAGS = {
-  ANGULAR: {
-    name: "Angular",
-    class: "bg-black text-white",
-    icon: Angular,
-  },
-  LARAVEL: {
-    name: "Laravel",
-    class: "bg-[#003159] text-white",
-    icon: Laravel,
-  },
-  DOCKER: {
-    name: "Docker",
-    class: "bg-[#003159] text-white",
-    icon: Docker,
-  },
-  WORDPRESS: {
-    name: "Wordpress",
-    class: "bg-black text-white",
-    icon: Wordpress,
-  },
-  MYSQL: {
-    name: "Mysql",
-    class: "bg-[#003159] text-white",
-    icon: Mysql,
-  },
-  ASTRO: {
-    name: "Astro",
-    class: "bg-black text-white",
-    icon: AstroIcon,
-  },
-}
-const PROJECTS = [
-  {
-    title: "EasyFace - Reconocimiento Facial",
-    description:
-      "Proyecto en el que colabore el cual es un Software de Reconocimiento Facial, ampliamente utilizado en la industria para el control de acceso del personal.",
-    link: "https://www.instagram.com/ingeneoeasyface/?hl=es-la",
-    image: "/projects/easyface.webp",
-    tags: [TAGS.LARAVEL, TAGS.ANGULAR, TAGS.MYSQL],
-  },
-  {
-    title: "Haro Epico",
-    description:
-      "Proyecto de e-commerce creado desde cero con tecnologias como Wordpress, MySQL y Montado en contenedores Docker",
-    link: "https://haroepico.netlify.app",
-    image: "/projects/haroepico.webp",
-    tags: [TAGS.MYSQL, TAGS.ANGULAR, TAGS.DOCKER],
-  },
-  {
-    title: "Portafolio Web CeleDesign",
-    description:
-      "Proyecto portafolio para diseñadora grafica, El cual fue desarrollado con Astro para un rendimiento optimo y una experiencia de usuario excepcional.",
-    github: "https://github.com/JulianD3v/celedesign",
-    image: "/projects/celena.webp",
-    link: "https://celena.site",
-    tags: [TAGS.DOCKER, TAGS.ASTRO],
-  },
-]
+import ProjectCard from "./ProjectCard.astro"
+import ProjectDetail from "./ProjectDetail.astro"
+import TitleSection from "./TitleSection.astro"
+import { projects } from "@/data/site"
 ---
-<div class="flex flex-col gap-y-16">
-  {
-    PROJECTS.map(({ image, title, description, tags, link, github }) => (
-    <article class="flex flex-col space-x-0 space-y-8 group md:flex-row md:space-x-8 md:space-y-0">
-  <div class="w-full md:w-1/2">
-    <div class="relative flex flex-col items-center col-span-6 row-span-5 gap-8 transition duration-500 ease-in-out transform shadow-xl overflow-clip rounded-xl sm:rounded-xl md:group-hover:-translate-y-1 md:group-hover:shadow-2xl lg:border lg:border-gray-800 lg:hover:border-gray-700 lg:hover:bg-gray-800/50">
-      <img alt="Julian Quintero" class="object-cover object-top w-full h-56 transition duration-500 sm:h-full md:scale-110 md:group-hover:scale-105" loading="eager" src={image} />
+
+<section
+  id="proyectos"
+  data-section="proyectos"
+  data-horizontal
+  class="relative flex flex-col overflow-hidden py-20 sm:py-24 lg:h-[100svh] lg:justify-center lg:py-0"
+>
+  <div
+    class="mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-10 xl:max-w-[1560px]"
+    data-reveal
+  >
+    <TitleSection index="03" kicker="Portafolio" title="Proyectos seleccionados" />
+
+    <div
+      class="mt-8 flex items-center justify-between gap-4 border-t border-line/10 pt-4 font-mono text-[10px] uppercase tracking-[0.18em] text-muted"
+    >
+      <p class="flex items-center gap-2">
+        <span class="size-1.5 rounded-full bg-accent"></span>
+        Desliza horizontalmente
+      </p>
+      <p data-horizontal-counter class="hidden tabular-nums lg:inline">
+        01 / {String(projects.length).padStart(2, "0")}
+      </p>
     </div>
   </div>
 
-  <div class="w-full md:w-1/2 md:max-w-lg">
-    <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
-      {title}
-    </h3>
-    <div class="flex flex-wrap mt-2">
-      <ul class="flex flex-row mb-2 gap-x-2">
-          {tags.map((tag) => (
-            <li>
-              <span
-                class={`flex gap-x-2 rounded-full text-xs ${tag.class} py-1 px-2 `}
-              >
-                <tag.icon class="size-4" />
-                {tag.name}
-              </span>
-            </li>
-          ))}
-        </ul>
+  <div
+    data-horizontal-track
+    data-tilt-scope
+    class="flex w-full flex-col gap-6 px-4 pt-10 sm:px-6 lg:w-max lg:flex-row lg:gap-8 lg:px-10"
+  >
+    {
+      projects.map((project, index) => (
+        <ProjectCard project={project} index={index} />
+      ))
+    }
+  </div>
 
-      <div class="mt-2 text-gray-700 dark:text-gray-400">{description}</div>
-      <footer class="flex items-end justify-start mt-4 gap-x-4">
-          {github && (
-            <LinkButton href={github}>
-              <GitHub class="size-6" />
-              Codigo
-            </LinkButton>
-          )}
-          {link && (
-            <LinkButton href={link}>
-              <Link class="size-4" />
-              Proyecto
-            </LinkButton>
-          )}
-        </footer>
+  <div class="mt-10 hidden px-4 sm:px-6 lg:mt-0 lg:block lg:px-10">
+    <div class="h-px w-full overflow-hidden bg-line/10">
+      <div
+        data-horizontal-progress
+        class="h-full w-full origin-left scale-x-0 bg-accent"
+      >
+      </div>
     </div>
   </div>
-</article>
-    ))
-  }
-</div>
+</section>
 
-
-
+<ProjectDetail projects={projects} />

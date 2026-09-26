@@ -1,0 +1,200 @@
+---
+import { Image } from "astro:assets"
+import GitHub from "./icons/GitHub.astro"
+import Link from "./icons/Link.astro"
+import { projectImages } from "@/data/project-images"
+import type { Project } from "@/data/site"
+import { buildLqip } from "@/lib/images"
+
+interface Props {
+  projects: readonly Project[]
+}
+
+const { projects } = Astro.props
+
+const panels = await Promise.all(
+  projects.map(async (project) => {
+    const { image } = projectImages[project.title]
+    const lqip = await buildLqip(image)
+    return { project, image, lqip }
+  }),
+)
+---
+
+<div
+  data-project-drawer
+  class="pointer-events-none fixed inset-0 z-[140] hidden"
+  aria-hidden="true"
+>
+  <div
+    data-drawer-backdrop
+    class="absolute inset-0 bg-bg/70 opacity-0 backdrop-blur-sm transition-opacity duration-300"
+  >
+  </div>
+
+  <aside
+    data-drawer-panel
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="drawer-title"
+    tabindex="-1"
+    class="absolute inset-y-0 right-0 flex w-full max-w-xl translate-x-full flex-col border-l border-line/10 bg-bg/95 shadow-[-40px_0_120px_-40px_rgb(0_0_0/0.5)] backdrop-blur-2xl transition-transform duration-500 ease-swift"
+  >
+    <header
+      class="flex shrink-0 items-start justify-between gap-4 border-b border-line/10 px-6 py-5"
+    >
+      <div class="min-w-0">
+        <p
+          data-drawer-kicker
+          class="font-mono text-[10px] uppercase tracking-[0.2em] text-accent"
+        >
+        </p>
+        <h2
+          id="drawer-title"
+          data-drawer-title
+          class="mt-1 truncate font-display text-2xl font-semibold tracking-tight"
+        >
+        </h2>
+      </div>
+
+      <button
+        type="button"
+        data-drawer-close
+        aria-label="Cerrar detalle"
+        class="grid size-9 shrink-0 place-items-center rounded-full border border-line/10 text-fg transition-colors hover:border-accent hover:text-accent"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          class="size-4"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M6 6l12 12M18 6L6 18"></path>
+        </svg>
+      </button>
+    </header>
+
+    <div data-lenis-prevent class="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+      {
+        panels.map(({ project, image, lqip }, index) => (
+          <article
+            data-drawer-panel-item
+            data-title={project.title}
+            hidden={index > 0}
+            class="flex flex-col gap-7 px-6 py-7"
+          >
+            <figure
+              class="relative overflow-hidden rounded-2xl border border-line/10 bg-bg-soft"
+            >
+              <span
+                aria-hidden="true"
+                class="absolute inset-0 scale-110 bg-cover bg-center blur-xl"
+                style={`background-image:url("${lqip}")`}
+              >
+              </span>
+              <Image
+                src={image}
+                alt={project.imageAlt}
+                  width={1600}
+                  height={1000}
+                  widths={[640, 900, 1200]}
+                  loading="lazy"
+                  decoding="async"
+                  format="avif"
+                  quality={82}
+                  sizes="(min-width: 768px) 36rem, 100vw"
+                class="relative block w-full"
+              />
+              <figcaption class="absolute inset-x-0 bottom-0 bg-[linear-gradient(to_top,rgb(var(--c-bg)),transparent)] px-4 pb-3 pt-8 font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
+                {project.imageAlt}
+              </figcaption>
+            </figure>
+
+            <p class="text-pretty text-base leading-relaxed text-muted">
+              {project.description}
+            </p>
+
+            <dl class="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line/10 bg-line/10">
+              <div class="bg-bg/70 px-4 py-3">
+                <dt class="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
+                  Rol
+                </dt>
+                <dd class="mt-1 text-sm text-fg">{project.detail?.role}</dd>
+              </div>
+              <div class="bg-bg/70 px-4 py-3">
+                <dt class="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
+                  Periodo
+                </dt>
+                <dd class="mt-1 text-sm text-fg">{project.detail?.year}</dd>
+              </div>
+            </dl>
+
+            <section>
+              <h3 class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
+                Arquitectura
+              </h3>
+              <ul class="mt-3 space-y-2 text-sm text-muted">
+                {project.detail?.architecture.map((item) => (
+                  <li class="flex gap-3">
+                    <span aria-hidden="true" class="mt-2 size-1 shrink-0 rounded-full bg-accent" />
+                    <span class="text-pretty">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section>
+              <h3 class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
+                Decisiones técnicas
+              </h3>
+              <ul class="mt-3 space-y-2 text-sm text-muted">
+                {project.detail?.decisions.map((item) => (
+                  <li class="flex gap-3">
+                    <span aria-hidden="true" class="mt-2 size-1 shrink-0 rounded-full bg-accent" />
+                    <span class="text-pretty">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <ul class="flex flex-wrap gap-2">
+              {project.tags.map((tag) => (
+                <li class="rounded-full border border-line/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.1em] text-muted">
+                  {tag.name}
+                </li>
+              ))}
+            </ul>
+
+            <div class="flex flex-wrap items-center gap-2 pb-2">
+              {project.github && (
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-2 rounded-full border border-line/15 px-4 py-2.5 text-sm font-semibold text-fg transition-colors duration-300 hover:border-accent hover:text-accent"
+                >
+                  <GitHub class="size-4" />
+                  Código
+                </a>
+              )}
+              {project.link && (
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2.5 text-sm font-semibold text-accent-contrast transition-[filter] duration-300 hover:brightness-110"
+                >
+                  <Link class="size-4" />
+                  Visitar
+                </a>
+              )}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </aside>
+</div>

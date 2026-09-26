@@ -1,0 +1,41 @@
+---
+interface Props {
+  text?: string
+  class?: string
+}
+
+const {
+  text = "Disponible para proyectos · ",
+  class: className = "",
+} = Astro.props
+---
+
+<div
+  data-rotate="26"
+  class={`pointer-events-none grid place-items-center ${className}`}
+  aria-hidden="true"
+>
+  <svg viewBox="0 0 200 200" class="size-full overflow-visible">
+    <defs>
+      <path
+        id="rotating-badge-path"
+        d="M 100,100 m -74,0 a 74,74 0 1,1 148,0 a 74,74 0 1,1 -148,0"
+        fill="none"
+      >
+      </path>
+    </defs>
+    <text
+      class="fill-current font-mono text-[15px] uppercase tracking-[0.24em]"
+    >
+      <textPath href="#rotating-badge-path" startOffset="0">{text.repeat(2)}</textPath>
+    </text>
+  </svg>
+  <span
+    class="absolute grid size-[22%] place-items-center rounded-full bg-accent text-accent-contrast"
+  >
+    <svg viewBox="0 0 24 24" class="size-1/2" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M7 17L17 7"></path>
+      <path d="M8 7h9v9"></path>
+    </svg>
+  </span>
+</div>

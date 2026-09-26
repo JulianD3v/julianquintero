@@ -1,46 +1,106 @@
 ---
-import AngularIcon from "./icons/Angular.astro";
-import AstroIcon from "./icons/Astro.astro";
-import BootstrapIcon from "./icons/Bootstrap.astro";
-import CSSIcon from "./icons/Css.astro";
-import DockerIcon from "./icons/Docker.astro";
-import NodejsIcon from "./icons/Nodejs.astro";
-import DotnetIcon from "./icons/Dotnet.astro";
-import GithubIcon from "./icons/GitHub.astro";
-import HtmlIcon from "./icons/Html.astro";
-import JavaIcon from "./icons/Java.astro";
-import JavaScriptIcon from "./icons/Javascript.astro";
-import LaravelIcon from "./icons/Laravel.astro";
-import MysqlIcon from "./icons/Mysql.astro";
-import TailwindIcon from "./icons/Tailwind.astro";
-import TypeScriptIcon from "./icons/Typescript.astro";
-import WordpressIcon from "./icons/Wordpress.astro";
+import BrandIcon, { type BrandSlug } from "./BrandIcon.astro"
+import Vscode from "./icons/Vscode.astro"
+import { learning, stack } from "@/data/site"
+
+const SLUGS: Record<string, BrandSlug> = {
+  html: "html",
+  css: "css",
+  javascript: "javascript",
+  angular: "angular",
+  astro: "astro",
+  bootstrap: "bootstrap",
+  nextjs: "nextjs",
+  laravel: "laravel",
+  nodejs: "nodejs",
+  java: "java",
+  wordpress: "wordpress",
+  mysql: "mysql",
+  docker: "docker",
+  github: "github",
+  typescript: "typescript",
+  tailwind: "tailwind",
+  dotnet: "dotnet",
+}
 ---
 
-<div class="grid grid-cols-2 sm:grid-cols-4 gap-6 mt-0 justify-items-center">
-  {[
-    { component: HtmlIcon, name: "HTML" },
-    { component: CSSIcon, name: "CSS" },
-    { component: JavaScriptIcon, name: "JavaScript" },
-    /* { component: TypeScriptIcon, name: "TypeScript" }, */
-    { component: AngularIcon, name: "Angular" },
-    /* { component: AstroIcon, name: "Astro" }, */
-    /* { component: TailwindIcon, name: "TailwindCSS" },
-    { component: BootstrapIcon, name: "Bootstrap" }, */
-    { component: LaravelIcon, name: "Laravel" },
-    /* { component: DotnetIcon, name: ".NET" }, */
-    /* { component: NodejsIcon, name: "Node.js" }, */
-    { component: GithubIcon, name: "GitHub" },
-    { component: WordpressIcon, name: "WordPress" },
-    { component: DockerIcon, name: "Docker" },
-    { component: MysqlIcon, name: "MySQL" },
-    /* { component: JavaIcon, name: "Java" } */
-  ].map(({ component: TechIcon, name }) => (
-    <div class="flex flex-col items-center text-center">
-      <div class="bg-gray-200 dark:bg-gray-800 rounded-full p-2 flex items-center justify-center w-16 h-16 hover:scale-110 transition-transform">
-        <TechIcon />
+{
+  stack.map((group, groupIndex) => (
+    <article
+      data-spotlight
+      data-reveal
+      class="group/card relative overflow-hidden rounded-[1.5rem] border border-line/10 bg-bg/60 p-6 backdrop-blur-sm transition-colors duration-500 hover:border-accent/30 sm:p-7"
+    >
+      <div class="flex items-baseline justify-between gap-4">
+        <h3 class="font-display text-lg font-semibold tracking-tight">
+          {group.title}
+        </h3>
+        <span class="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
+          0{groupIndex + 1}
+        </span>
       </div>
-      <span class="mt-2 text-sm font-medium">{name}</span>
+
+      <ul data-icon-grid class="mt-6 grid grid-cols-3 gap-x-4 gap-y-5 sm:grid-cols-4">
+        {group.items.map((item) => (
+          <li data-icon class="group/icon flex flex-col items-center gap-2.5 text-center">
+            <span class="grid size-12 place-items-center rounded-2xl border border-line/10 bg-bg-soft transition-all duration-300 group-hover/icon:-translate-y-1 group-hover/icon:border-accent/40 group-hover/icon:bg-bg sm:size-14">
+              {item.icon === "vscode" ? (
+                <Vscode class="size-6 text-muted transition-colors duration-300 group-hover/icon:text-[#007ACC] sm:size-7" />
+              ) : (
+                <BrandIcon
+                  slug={SLUGS[item.icon]}
+                  class="size-6 text-muted transition-all duration-300 group-hover/icon:scale-110 group-hover/icon:text-[var(--brand)] sm:size-7"
+                />
+              )}
+            </span>
+            <span class="font-mono text-[10px] uppercase leading-tight tracking-[0.06em] text-muted">
+              {item.name}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </article>
+  ))
+}
+
+<div
+  data-reveal
+  class="relative overflow-hidden rounded-[1.5rem] border border-dashed border-accent/30 bg-accent/[0.04] p-6 sm:p-7 lg:col-span-3"
+>
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <span
+        class="relative grid size-2 place-items-center"
+        aria-hidden="true"
+      >
+        <span class="absolute inset-0 animate-ping rounded-full bg-accent/60"></span>
+        <span class="size-2 rounded-full bg-accent"></span>
+      </span>
+      <h3 class="font-display text-lg font-semibold tracking-tight">
+        Aprendiendo ahora
+      </h3>
     </div>
-  ))}
+    <p class="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
+      Constantemente en formación
+    </p>
+  </div>
+
+  <ul class="mt-6 flex flex-wrap gap-2.5">
+    {
+      learning.map((item, index) => (
+        <li
+          data-float={index * 0.35}
+          class="inline-flex items-center gap-2.5 rounded-full border border-line/10 bg-bg/70 py-1.5 pl-1.5 pr-4 text-sm backdrop-blur-sm transition-colors duration-300 hover:border-accent/40"
+        >
+          <span class="grid size-7 place-items-center rounded-full bg-bg-soft">
+            <BrandIcon
+              slug={SLUGS[item.icon]}
+              class="size-4 text-muted transition-colors duration-300"
+            />
+          </span>
+          {item.name}
+        </li>
+      ))
+    }
+  </ul>
 </div>

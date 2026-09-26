@@ -1,0 +1,134 @@
+---
+import { Image } from "astro:assets"
+import LinkButton from "./LinkButton.astro"
+import GitHub from "./icons/GitHub.astro"
+import Link from "./icons/Link.astro"
+import { projectImages } from "@/data/project-images"
+import type { Project } from "@/data/site"
+import { buildLqip } from "@/lib/images"
+
+interface Props {
+  project: Project
+  index: number
+}
+
+const { project, index } = Astro.props
+
+const { image: imageSrc } = projectImages[project.title]
+const imageLqip = await buildLqip(imageSrc)
+---
+
+<article
+  data-horizontal-card
+  data-spotlight
+  data-tilt
+  data-tilt-max="6"
+  class={`group relative flex w-[86vw] max-w-md shrink-0 flex-col overflow-hidden rounded-[1.5rem] border bg-bg/70 backdrop-blur-sm transition-colors duration-500 [transform-style:preserve-3d] sm:w-[70vw] lg:h-[min(32rem,64vh)] lg:w-[min(74vw,32rem)] lg:max-w-none ${
+    project.featured
+      ? "border-accent/40 shadow-[0_30px_90px_-40px_rgb(var(--c-accent)/0.55)]"
+      : "border-line/10"
+  }`}
+>
+  <span
+    data-tilt-glow
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-0 z-20 rounded-[1.5rem] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+    style="background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(var(--c-accent)/0.18), transparent 65%);"
+  >
+  </span>
+
+  <button
+    type="button"
+    data-project-detail={project.title}
+    data-cursor="Ver"
+    aria-label={`Ver el detalle de ${project.title}`}
+    class="absolute inset-0 z-30 cursor-pointer rounded-[1.5rem]"
+  >
+  </button>
+
+  <div
+    class="relative aspect-[16/10] overflow-hidden bg-bg-soft lg:aspect-auto lg:flex-1"
+  >
+    <div
+      aria-hidden="true"
+      class="absolute -inset-8 scale-110 bg-cover bg-center opacity-40 blur-2xl saturate-150"
+      style={`background-image:url("${imageLqip}")`}
+    >
+    </div>
+    <span
+      aria-hidden="true"
+      class="absolute inset-0 scale-110 bg-cover bg-center blur-xl"
+      style={`background-image:url("${imageLqip}")`}
+    >
+    </span>
+    <Image
+      src={imageSrc}
+      alt={project.imageAlt}
+          width={1600}
+          height={1000}
+          widths={[512, 768, 1024]}
+          loading="lazy"
+          decoding="async"
+          format="avif"
+          quality={80}
+          sizes="(min-width: 1024px) 32rem, 86vw"
+      class="absolute inset-0 size-full scale-[1.08] object-cover object-top transition-transform duration-[1.2s] ease-swift group-hover:scale-100"
+    />
+    <div
+      aria-hidden="true"
+      class="absolute inset-0 bg-[linear-gradient(to_top,rgb(var(--c-bg)/0.92),transparent_55%)]"
+    >
+    </div>
+
+    <span
+      class="absolute left-4 top-4 grid size-8 place-items-center rounded-full border border-line/10 bg-bg/70 font-mono text-[11px] text-fg backdrop-blur"
+    >
+      {String(index + 1).padStart(2, "0")}
+    </span>
+
+    <span
+      class="absolute right-4 top-4 rounded-full bg-accent px-3 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-accent-contrast"
+    >
+      {project.kicker}
+    </span>
+  </div>
+
+  <div class="flex shrink-0 flex-col gap-4 p-5 sm:p-6">
+    <h3
+      class="font-display text-xl font-semibold leading-tight tracking-tight sm:text-2xl"
+    >
+      {project.title}
+    </h3>
+
+    <p class="text-pretty text-sm text-muted">{project.description}</p>
+
+    <ul class="flex flex-wrap gap-1.5">
+      {
+        project.tags.map((tag) => (
+          <li class="rounded-full border border-line/10 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.1em] text-muted">
+            {tag.name}
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="mt-auto flex flex-wrap items-center gap-2 pt-2">
+      {
+        project.github && (
+          <LinkButton href={project.github} class="relative z-30">
+            <GitHub class="size-4" />
+            Código
+          </LinkButton>
+        )
+      }
+      {
+        project.link && (
+          <LinkButton href={project.link} variant="accent" class="relative z-30">
+            <Link class="size-4" />
+            Visitar
+          </LinkButton>
+        )
+      }
+    </div>
+  </div>
+</article>

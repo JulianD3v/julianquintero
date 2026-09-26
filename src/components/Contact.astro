@@ -1,0 +1,193 @@
+---
+import Marquee from "./Marquee.astro"
+import TitleSection from "./TitleSection.astro"
+import { contact, site, socials } from "@/data/site"
+
+import GitHub from "./icons/GitHub.astro"
+import LinkedIn from "./icons/LinkedIn.astro"
+import Mail from "./icons/Mail.astro"
+
+const ICONS: Record<string, typeof GitHub> = {
+  github: GitHub,
+  linkedin: LinkedIn,
+  mail: Mail,
+}
+
+const subject = encodeURIComponent("Hola Julián — Oportunidad / Proyecto")
+const body = encodeURIComponent("Hola Julián,\n\nme gustaría hablar contigo sobre:\n\n")
+const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${site.email}&su=${subject}&body=${body}`
+const outlookUrl = `https://outlook.live.com/mail/0/deeplink/compose?to=${site.email}&subject=${subject}&body=${body}`
+const mailtoUrl = `mailto:${site.email}?subject=${subject}&body=${body}`
+---
+
+<section
+  id="contacto"
+  data-section="contacto"
+  class="relative mx-auto w-full max-w-[1400px] scroll-mt-24 px-4 xl:max-w-[1560px] pb-24 pt-8 sm:px-6 sm:pb-32 lg:px-10"
+>
+  <TitleSection index="05" kicker={contact.kicker} title={contact.title} />
+
+  <div class="mt-10 grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+    <div class="space-y-6">
+      <p
+        data-reveal
+        class="max-w-2xl text-pretty text-lg text-muted sm:text-xl"
+      >
+        {contact.lead}
+      </p>
+
+      <div
+        data-reveal
+        class="flex flex-wrap items-center gap-3 pt-2 font-mono text-xs text-muted"
+      >
+        <span class="inline-flex items-center gap-2 rounded-full border border-line/10 bg-bg-soft/60 px-3 py-1.5 backdrop-blur-sm">
+          <span class="relative flex size-2">
+            <span class="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-75"></span>
+            <span class="relative inline-flex size-2 rounded-full bg-accent"></span>
+          </span>
+          {site.availabilityLabel}
+        </span>
+        <span class="inline-flex items-center gap-1.5 rounded-full border border-line/10 bg-bg-soft/60 px-3 py-1.5">
+          📍 {site.location}
+        </span>
+      </div>
+    </div>
+
+    <div class="space-y-4" data-reveal>
+      <!-- Copiar correo con feedback interactivo -->
+      <button
+        type="button"
+        data-copy={site.email}
+        data-magnetic="0.2"
+        data-cursor="Copiar"
+        class="group flex w-full items-center justify-between gap-4 rounded-2xl border border-line/10 bg-bg/60 px-5 py-4 text-left backdrop-blur-sm transition-all duration-300 hover:border-accent/40 hover:bg-bg/90 hover:shadow-lg"
+      >
+        <span class="flex items-center gap-3">
+          <span class="grid size-9 place-items-center rounded-xl bg-accent/10 text-accent">
+            <Mail class="size-4" />
+          </span>
+          <span class="text-sm font-medium text-fg sm:text-base">{site.email}</span>
+        </span>
+        <span
+          data-copy-label
+          class="shrink-0 rounded-full border border-line/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted transition-colors group-hover:border-accent group-hover:text-accent"
+        >
+          Copiar correo
+        </span>
+      </button>
+
+      <!-- Botones de acción directa: Redactar en Gmail Web / Outlook Web -->
+      <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+        <a
+          href={gmailUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-magnetic="0.2"
+          data-cursor="Gmail"
+          class="group flex items-center justify-between gap-3 rounded-2xl bg-accent px-5 py-4 text-accent-contrast shadow-md transition-all duration-300 hover:shadow-accent/25 hover:shadow-lg hover:-translate-y-0.5"
+        >
+          <div class="flex flex-col">
+            <span class="font-display text-base font-semibold tracking-tight">
+              Abrir en Gmail
+            </span>
+            <span class="font-mono text-[10px] uppercase tracking-wider opacity-85">
+              En tu navegador
+            </span>
+          </div>
+          <span
+            aria-hidden="true"
+            class="text-xl transition-transform duration-300 group-hover:translate-x-1"
+            >→</span
+          >
+        </a>
+
+        <a
+          href={outlookUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-magnetic="0.2"
+          data-cursor="Outlook"
+          class="group flex items-center justify-between gap-3 rounded-2xl border border-line/10 bg-bg/80 px-5 py-4 text-fg backdrop-blur-sm transition-all duration-300 hover:border-accent/40 hover:bg-bg hover:shadow-md hover:-translate-y-0.5"
+        >
+          <div class="flex flex-col">
+            <span class="font-display text-base font-semibold tracking-tight">
+              Abrir en Outlook
+            </span>
+            <span class="font-mono text-[10px] uppercase tracking-wider text-muted">
+              Outlook Web
+            </span>
+          </div>
+          <span
+            aria-hidden="true"
+            class="text-xl text-muted transition-transform duration-300 group-hover:translate-x-1 group-hover:text-accent"
+            >→</span
+          >
+        </a>
+      </div>
+
+      <!-- Enlace a cliente de correo del sistema (fallback nativo) -->
+      <div class="flex items-center justify-between px-2 pt-1 font-mono text-[11px] text-muted">
+        <span>¿Usas app de correo de escritorio?</span>
+        <a
+          href={mailtoUrl}
+          class="text-accent underline underline-offset-4 transition-colors hover:text-fg"
+        >
+          Abrir cliente local (mailto)
+        </a>
+      </div>
+
+      <!-- Redes sociales y Hoja de vida -->
+      <ul class="flex flex-wrap gap-2 pt-3 border-t border-line/10">
+        {
+          socials.map((social) => {
+            const Icon = ICONS[social.icon]
+            return (
+              <li>
+                <a
+                  href={social.href}
+                  target={social.icon === "mail" ? undefined : "_blank"}
+                  rel="noopener noreferrer"
+                  data-social={social.icon}
+                  data-magnetic="0.35"
+                  data-cursor={social.label}
+                  class="inline-flex items-center gap-2 rounded-full border border-line/10 bg-bg/60 px-4 py-2 text-sm text-muted backdrop-blur-sm transition-colors duration-300 hover:border-accent/40 hover:text-fg"
+                >
+                  <Icon class="size-4" />
+                  {social.label}
+                </a>
+              </li>
+            )
+          })
+        }
+        <li>
+          <a
+            href={site.cv.page}
+            data-magnetic="0.35"
+            data-cursor="Abrir"
+            class="inline-flex items-center gap-2 rounded-full border border-line/10 bg-bg/60 px-4 py-2 text-sm text-muted backdrop-blur-sm transition-colors duration-300 hover:border-accent/40 hover:text-fg"
+          >
+            Hoja de vida
+            <span aria-hidden="true">↗</span>
+          </a>
+        </li>
+        <li>
+          <a
+            href={site.cv.pdf}
+            download
+            data-magnetic="0.35"
+            data-cursor="PDF"
+            class="inline-flex items-center gap-2 rounded-full border border-line/10 bg-bg/60 px-4 py-2 text-sm text-muted backdrop-blur-sm transition-colors duration-300 hover:border-accent/40 hover:text-fg"
+          >
+            Descargar CV
+            <span aria-hidden="true">↓</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<Marquee
+  items={["Gracias por ver", "Hablemos", "Let's talk", "Gracias por ver", "Hablemos", "Let's talk"]}
+  class="border-line/10"
+/>

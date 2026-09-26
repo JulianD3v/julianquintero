@@ -1,5 +1,5 @@
 ---
-import LinkInline from "./LinkInline.astro"
+import Link from "./icons/Link.astro"
 
 interface Props {
   title: string
@@ -7,50 +7,62 @@ interface Props {
   description: string
   link?: string
   date: string
+  highlights?: readonly string[]
 }
 
-const { title, company, description, link, date } = Astro.props
+const { title, company, description, link, date, highlights = [] } = Astro.props
 ---
 
-<div
-  class="relative mx-12 pb-12 grid before:absolute before:left-[-35px] before:block before:h-full before:border-l-2 before:border-black/20 dark:before:border-white/15 before:content-[''] md:grid-cols-5 md:gap-10 md:space-x-4]"
+<article
+  class="group relative grid gap-6 border-t border-line/10 py-8 md:grid-cols-[14rem_1fr] md:gap-10 md:py-10 md:pl-8"
 >
-  <div class="relative pb-12 md:col-span-2">
-    <div class="sticky top-0">
-      <span class="text-yellow-400 -left-[42px] absolute rounded-full text-5xl"
-        >&bull;</span
-      >
+  <span
+    data-timeline-dot
+    aria-hidden="true"
+    class="absolute -left-[0.5px] top-[2.4rem] hidden size-4 rounded-full border-2 border-accent bg-bg md:block"
+  >
+  </span>
 
-      <h3 class="text-xl font-bold text-yellow-400">{title}</h3>
-      <h4 class="font-semibold text-xl text-gray-600 dark:text-white">{company}</h4>
-      <time class="p-0 m-0 text-sm text-gray-600/80 dark:text-white/80">{date}</time>
-    </div>
-  </div>
-  <div class="relative flex flex-col gap-2 pb-4 text-gray-600 dark:text-gray-300 md:col-span-3">
-    {description}
-    {
-      link && (
-        <LinkInline href={link}>
-          Visitar Web{" "}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="w-5 icon icon-tabler icon-tabler-chevron-right"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-            stroke="currentColor"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+  <div class="md:sticky md:top-28 md:self-start">
+    <p class="font-mono text-[11px] uppercase tracking-[0.16em] text-accent">
+      {date}
+    </p>
+    <h3
+      class="mt-2 font-display text-xl font-semibold leading-tight tracking-tight text-balance sm:text-2xl"
+    >
+      {title}
+    </h3>
+    <p class="mt-1 flex items-center gap-2 text-sm text-muted">
+      {company}
+      {
+        link && (
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Visitar ${company}`}
+            class="text-muted transition-colors hover:text-accent"
           >
-            <>
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M9 6l6 6l-6 6" />
-            </>
-          </svg>
-        </LinkInline>
+            <Link class="size-3.5" />
+          </a>
+        )
+      }
+    </p>
+  </div>
+
+  <div class="space-y-5">
+    <p class="max-w-2xl text-pretty text-muted">{description}</p>
+
+    {
+      highlights.length > 0 && (
+        <ul class="flex flex-wrap gap-2">
+          {highlights.map((highlight) => (
+            <li class="rounded-full border border-line/10 bg-bg/60 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.1em] text-muted">
+              {highlight}
+            </li>
+          ))}
+        </ul>
       )
     }
   </div>
-</div>
+</article>

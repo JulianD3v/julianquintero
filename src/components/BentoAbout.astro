@@ -1,0 +1,312 @@
+---
+import { Image } from "astro:assets"
+import { about, site, socials } from "@/data/site"
+import julianPortrait from "@/assets/images/julian.webp"
+import { buildLqip } from "@/lib/images"
+import { bookingHref, isExternalBooking } from "@/lib/links"
+
+const portraitLqip = await buildLqip(julianPortrait)
+
+const github = socials.find((social) => social.icon === "github")
+const githubUser = github?.name ?? "JulianD3v"
+
+const agendaHref = bookingHref(site.bookingUrl, site.email)
+const agendaExternal = isExternalBooking(site.bookingUrl)
+---
+
+<div class="mt-14 grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
+  <!-- Tarjeta principal (bio) -->
+  <div
+    data-reveal
+    data-tilt
+    data-tilt-max="3"
+    class="group relative flex flex-col gap-6 overflow-hidden rounded-3xl border border-line/10 bg-bg/60 p-6 backdrop-blur-md [transform-style:preserve-3d] md:col-span-2 lg:col-span-2"
+  >
+    <div class="flex items-start gap-4">
+      <div
+        data-about-image
+        data-parallax-scope
+        class="relative size-16 shrink-0 overflow-hidden rounded-2xl border border-line/10 bg-bg-soft sm:size-20"
+      >
+        <span
+          aria-hidden="true"
+          class="absolute inset-0 scale-110 bg-cover bg-center blur-lg"
+          style={`background-image:url("${portraitLqip}")`}
+        >
+        </span>
+        <Image
+          src={julianPortrait}
+            width={165}
+            height={165}
+            widths={[165, 330]}
+            alt="Retrato de Julián Quintero"
+            loading="lazy"
+            decoding="async"
+            format="avif"
+            quality={80}
+          data-parallax="6"
+          class="absolute inset-x-0 -top-[6%] h-[112%] w-full object-cover object-top"
+        />
+      </div>
+
+      <div class="min-w-0">
+        <h3 class="font-display text-2xl font-bold tracking-tight">
+          {site.name}
+        </h3>
+        <p class="mt-1 text-sm text-muted">{site.title}</p>
+        <p
+          data-float="0.4"
+          class="mt-3 w-fit rounded-full border border-line/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted"
+        >
+          4 años · Universidad + autodidacta
+        </p>
+      </div>
+    </div>
+
+    <div class="space-y-4 text-base text-pretty text-muted sm:text-lg">
+      {
+        about.paragraphs.map((paragraph) => (
+          <p data-words class="text-rich">
+            <Fragment set:html={paragraph} />
+          </p>
+        ))
+      }
+    </div>
+
+    <ul
+      data-reveal-group
+      class="grid gap-x-6 gap-y-3 border-t border-line/10 pt-5 sm:grid-cols-2"
+    >
+      {
+        about.principles.map((principle) => (
+          <li
+            data-reveal-item
+            class="flex items-center gap-3 text-sm text-fg"
+          >
+            <span
+              class="grid size-5 shrink-0 place-items-center rounded-full bg-accent/15 text-[10px] text-accent"
+              aria-hidden="true"
+            >
+              ✳
+            </span>
+            {principle}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <!-- Widget de clima en Medellín -->
+  <div
+    data-bento-weather
+    data-reveal
+    data-tilt
+    data-tilt-max="2"
+    class="group relative flex flex-col justify-between gap-4 rounded-3xl border border-line/10 bg-bg/60 p-6 backdrop-blur-md [transform-style:preserve-3d]"
+  >
+    <div class="flex items-center justify-between gap-3">
+      <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
+        Medellín, CO
+      </span>
+      <span
+        class="relative flex size-2"
+        aria-hidden="true"
+        data-bento-weather-dot
+      >
+        <span class="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-75"
+        >
+        </span>
+        <span class="relative inline-flex size-2 rounded-full bg-accent"></span>
+      </span>
+    </div>
+
+    <div class="flex items-end justify-between gap-3">
+      <div class="flex items-baseline gap-2">
+        <span
+          id="bento-temp"
+          data-bento-temp
+          class="font-display text-4xl font-bold tracking-tight tabular-nums"
+          >—</span
+        >
+        <span class="text-sm text-muted">°C</span>
+      </div>
+
+      <svg
+        data-bento-weather-icon
+        viewBox="0 0 24 24"
+        class="size-9 shrink-0 text-accent"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <circle cx="12" cy="12" r="4.5"></circle>
+        <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4"
+        ></path>
+      </svg>
+    </div>
+
+    <p class="flex items-center justify-between gap-3 text-xs text-muted">
+      <span data-bento-weather-label aria-live="polite">Obteniendo clima…</span>
+      <span class="shrink-0 font-mono tabular-nums">
+        <span data-bento-clock data-timezone={site.timezone}>--:--</span>
+      </span>
+    </p>
+  </div>
+
+  <!-- Widget de estado GitHub -->
+  <div
+    data-bento-github
+    data-reveal
+    data-tilt
+    data-tilt-max="2"
+    class="group relative flex flex-col justify-between gap-4 rounded-3xl border border-line/10 bg-bg/60 p-6 backdrop-blur-md [transform-style:preserve-3d]"
+  >
+    <div class="flex items-center justify-between gap-3">
+      <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
+        Actividad
+      </span>
+      <a
+        href={`https://github.com/${githubUser}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-cursor="GitHub"
+        aria-label={`Ver el perfil de ${githubUser} en GitHub`}
+        class="text-muted transition-colors duration-300 hover:text-accent"
+      >
+        <svg viewBox="0 0 24 24" class="size-4" fill="currentColor" aria-hidden="true">
+          <path
+            d="M12 .5C5.73.5.5 5.73.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.3-1.7-1.3-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.3 1.19-3.1-.12-.3-.52-1.48.11-3.08 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.5 3.17-1.18 3.17-1.18.63 1.6.23 2.78.11 3.07.74.81 1.19 1.85 1.19 3.11 0 4.43-2.7 5.4-5.26 5.69.42.36.79 1.06.79 2.14v3.17c0 .31.2.67.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"
+          ></path>
+        </svg>
+      </a>
+    </div>
+
+    <div>
+      <p
+        data-bento-github-repos
+        class="font-display text-lg font-semibold tracking-tight text-accent"
+      >
+        15+ tecnologías dominadas
+      </p>
+      <p data-bento-github-activity class="mt-1 text-xs text-muted">
+        Consultando repositorios…
+      </p>
+    </div>
+  </div>
+
+  <!-- Widget "Escuchando ahora / Focus mode" -->
+  <div
+    data-bento-listening
+    data-reveal
+    data-tilt
+    data-tilt-max="2"
+    class="group relative flex flex-col justify-between gap-5 overflow-hidden rounded-3xl border border-line/10 bg-bg/60 p-6 backdrop-blur-md [transform-style:preserve-3d] md:col-span-2 lg:col-span-2"
+  >
+    <div class="flex items-center justify-between gap-3">
+      <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
+        Ahora mismo
+      </span>
+      <span
+        class="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-accent"
+      >
+        <span class="relative flex size-1.5" aria-hidden="true">
+          <span class="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-75"
+          ></span>
+          <span class="relative inline-flex size-1.5 rounded-full bg-accent"></span>
+        </span>
+        Focus mode
+      </span>
+    </div>
+
+    <div class="flex h-16 items-end gap-1.5" aria-hidden="true">
+      {
+        Array.from({ length: 28 }).map((_, index) => (
+          <span
+            data-wave-bar
+            class="block h-full w-full min-w-[2px] flex-1 origin-bottom rounded-full bg-accent/50"
+            style={`--i:${index}`}
+          />
+        ))
+      }
+    </div>
+
+    <p class="text-sm text-pretty text-muted">
+      <span data-bento-listening-track class="text-fg">Lofi para programar</span>
+      · sesión de trabajo profundo en curso.
+    </p>
+  </div>
+
+  <!-- Badge de disponibilidad: abre la agenda directa -->
+  <a
+        href={agendaHref}
+        target={agendaExternal ? "_blank" : undefined}
+        rel={agendaExternal ? "noopener noreferrer" : undefined}
+    data-magnetic="0.25"
+    data-cursor="Agendar"
+    data-reveal
+    class="group relative flex items-center justify-between gap-4 overflow-hidden rounded-3xl border border-accent/30 bg-accent/[0.07] p-6 backdrop-blur-md transition-colors duration-500 hover:border-accent md:col-span-1 lg:col-span-2"
+  >
+    <div class="min-w-0">
+      <p class="font-display text-xl font-semibold tracking-tight">
+        ¿Agendamos una llamada de 20 minutos?
+      </p>
+      <p class="mt-1 text-sm text-pretty text-muted">
+        {site.availabilityLabel} · respuesta en menos de 24 horas.
+      </p>
+    </div>
+
+    <span class="relative grid size-12 shrink-0 place-items-center" aria-hidden="true">
+      <span
+        class="absolute inset-0 rounded-full bg-accent/25 motion-safe:animate-ping"
+      >
+      </span>
+      <span
+        class="relative grid size-12 place-items-center rounded-full bg-accent text-accent-contrast transition-transform duration-500 ease-swift group-hover:scale-110"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          class="size-5"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="3" y="5" width="18" height="16" rx="3"></rect>
+          <path d="M8 3v4M16 3v4M3 11h18"></path>
+          <path d="M9 15l2 2 4-4"></path>
+        </svg>
+      </span>
+    </span>
+  </a>
+</div>
+
+<style>
+  /* Onda sonora: barras con escala y retardo cíclicos (sin JS). */
+  [data-wave-bar] {
+    animation: bento-wave 1.6s ease-in-out infinite;
+    animation-delay: calc(var(--i) * -90ms);
+  }
+
+  @keyframes bento-wave {
+    0%,
+    100% {
+      transform: scaleY(0.35);
+      opacity: 0.45;
+    }
+    50% {
+      transform: scaleY(1);
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-wave-bar] {
+      animation: none;
+      transform: scaleY(0.6);
+    }
+  }
+</style>

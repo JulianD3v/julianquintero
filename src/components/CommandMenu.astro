@@ -1,0 +1,199 @@
+---
+import { contact, nav, projects, site, socials } from "@/data/site"
+
+const ICONS: Record<string, string> = {
+  github: "GH",
+  linkedin: "IN",
+  mail: "@",
+}
+
+type Command = {
+  id: string
+  label: string
+  hint: string
+  group: string
+  keys: string[]
+  keywords: string
+}
+
+const COMMANDS: Command[] = [
+  ...nav.map((item) => ({
+    id: `go-${item.label}`,
+    label: `Ir a ${item.title}`,
+    hint: item.url,
+    group: "Navegar",
+    keys: [],
+    keywords: `${item.title} ${item.label} seccion ir`,
+  })),
+  {
+    id: "cv-pdf",
+    label: "Descargar CV en PDF",
+    hint: site.cv.pdf,
+    group: "Navegar",
+    keys: ["c", "v"],
+    keywords: "cv curriculum hoja de vida pdf descargar",
+  },
+  {
+    id: "cv-web",
+    label: "Ver la hoja de vida en el sitio",
+    hint: site.cv.page,
+    group: "Navegar",
+    keys: [],
+    keywords: "cv curriculum hoja de vida web ver",
+  },
+  {
+    id: "copy-email",
+    label: "Copiar correo",
+    hint: site.email,
+    group: "Contacto",
+    keys: ["c"],
+    keywords: "correo email copiar contactame escribir",
+  },
+  {
+    id: "theme",
+    label: "Alternar tema claro / oscuro",
+    hint: "Vista",
+    group: "Vista",
+    keys: ["t"],
+    keywords: "tema dark light oscuro claro sistema",
+  },
+  ...projects.map((project) => ({
+    id: `project-${project.title}`,
+    label: project.title,
+    hint: project.kicker,
+    group: "Proyectos",
+    keys: [],
+    keywords: `proyecto ${project.title} ${project.kicker} ${project.tags
+      .map((tag) => tag.name)
+      .join(" ")}`,
+  })),
+  ...socials.map((social) => ({
+    id: `social-${social.icon}`,
+    label: social.label,
+    hint: social.name,
+    group: "Redes",
+    keys: [],
+    keywords: `red social ${social.label} ${social.name}`,
+  })),
+  {
+    id: "mail",
+    label: "Escribir un correo",
+    hint: contact.title,
+    group: "Contacto",
+    keys: [],
+    keywords: "escribir correo email contactame mailto",
+  },
+]
+
+const ICON_LABELS: Record<string, string> = ICONS
+---
+
+<div
+  data-command-menu
+  class="group pointer-events-none fixed inset-0 z-[150] hidden"
+  aria-hidden="true"
+>
+  <div
+    data-command-backdrop
+    class="absolute inset-0 bg-bg/70 opacity-0 backdrop-blur-sm transition-opacity duration-300 group-[.is-open]:opacity-100"
+  >
+  </div>
+
+  <div class="absolute inset-0 flex items-start justify-center px-4 pt-[12vh]">
+    <div
+      data-command-panel
+      role="dialog"
+      aria-modal="true"
+      aria-label="Paleta de comandos"
+      class="w-full max-w-lg translate-y-3 scale-[0.98] overflow-hidden rounded-3xl border border-line/10 bg-bg/90 opacity-0 shadow-[0_40px_120px_-30px_rgb(0_0_0/0.55)] backdrop-blur-2xl transition-all duration-300 ease-swift group-[.is-open]:translate-y-0 group-[.is-open]:scale-100 group-[.is-open]:opacity-100"
+    >
+      <div class="flex items-center gap-3 border-b border-line/10 px-5 py-4">
+        <span
+          aria-hidden="true"
+          class="font-mono text-xs uppercase tracking-[0.2em] text-accent"
+        >
+          ⌘
+        </span>
+        <input
+          data-command-input
+          type="text"
+          role="combobox"
+          aria-expanded="true"
+          aria-controls="command-listbox"
+          aria-autocomplete="list"
+          autocomplete="off"
+          spellcheck="false"
+          placeholder="Busca una sección, un proyecto o una acción…"
+          class="w-full bg-transparent text-sm text-fg outline-none placeholder:text-muted"
+        />
+        <kbd
+          class="shrink-0 rounded-md border border-line/10 px-1.5 py-0.5 font-mono text-[10px] uppercase text-muted"
+        >
+          Esc
+        </kbd>
+      </div>
+
+      <ul
+        id="command-listbox"
+        data-command-list
+        role="listbox"
+        aria-label="Comandos"
+        class="max-h-[min(24rem,50vh)] overflow-y-auto overscroll-contain p-2"
+      >
+        {
+          COMMANDS.map((command, index) => (
+            <li>
+              <button
+                type="button"
+                role="option"
+                data-command={command.id}
+                data-command-group={command.group}
+                data-command-search={`${command.label} ${command.hint} ${command.keywords}`.toLowerCase()}
+                data-command-keys={command.keys.join(" ")}
+                aria-selected={index === 0 ? "true" : "false"}
+                class="group flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-left transition-colors duration-150 aria-selected:bg-fg/[0.07]"
+              >
+                <span class="min-w-0 flex-1">
+                  <span class="block truncate text-sm text-fg">{command.label}</span>
+                  <span class="block truncate font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
+                    {command.hint}
+                  </span>
+                </span>
+
+                <span class="flex shrink-0 items-center gap-1">
+                  {command.keys.map((key) => (
+                    <kbd class="grid size-5 place-items-center rounded-md border border-line/10 font-mono text-[10px] text-muted">
+                      {key}
+                    </kbd>
+                  ))}
+                  {command.group === "Redes" && (
+                    <span class="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
+                      {ICON_LABELS[command.id.replace("social-", "")] ?? "↗"}
+                    </span>
+                  )}
+                </span>
+              </button>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p
+        data-command-empty
+        class="hidden px-5 py-8 text-center text-sm text-muted"
+      >
+        Sin resultados. Prueba con “proyectos”, “cv” o “tema”.
+      </p>
+
+      <div
+        class="flex items-center justify-between gap-4 border-t border-line/10 px-5 py-3 font-mono text-[10px] uppercase tracking-[0.14em] text-muted"
+      >
+        <span>{COMMANDS.length} acciones</span>
+        <span class="flex items-center gap-3">
+          <span>↑↓ navegar</span>
+          <span>↵ abrir</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

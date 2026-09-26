@@ -1,70 +1,36 @@
 ---
-import Layout from "@/layouts/Layout.astro"
-
-import TechGrid from "@/components/TechGrid.astro"
 import AboutMe from "@/components/AboutMe.astro"
-import Briefcase from "@/components/icons/Briefcase.astro"
-import CodeIcon from "@/components/icons/Code.astro"
-import VsCodeIcon from "@/components/icons/Vscode.astro"
+import Contact from "@/components/Contact.astro"
 import Experience from "@/components/Experience.astro"
-import ProfileCheck from "@/components/icons/ProfileCheck.astro"
-import Projects from "@/components/Projects.astro"
-import SectionContainer from "@/components/SectionContainer.astro"
 import Hero from "@/components/Hero.astro"
-import TitleSection from "@/components/TitleSection.astro"
-import LearnGrid from "@/components/LearnGrid.astro"
+import Marquee from "@/components/Marquee.astro"
+import Projects from "@/components/Projects.astro"
+import Stack from "@/components/Stack.astro"
+import Layout from "@/layouts/Layout.astro"
+import { techMarqueeRow1, techMarqueeRow2 } from "@/data/site"
 ---
 
 <Layout
-  title="JulianDev | Desarrollador Web"
-  description="Contratame para crear tu aplicación web. Desarrollador Web Especializado en crear aplicaciones únicas."
+  title="Julian Quintero | Desarrollador Web Full-Stack en Medellín"
+  description="Portafolio de Julián Quintero, Tecnólogo en Desarrollo de Software y Desarrollador Web Full-Stack. Angular, Laravel, Docker y más. Disponible para freelance y nuevas oportunidades."
 >
-  <main class="px-4">
-    <SectionContainer class="py-16 md:py-36">
-      <Hero>
-      </slot>
-    </Hero>
-    </SectionContainer>
-    <div class="space-y-24">
-    <SectionContainer id="experiencia">
-      <TitleSection>
-        <Briefcase class="size-8" />
-        Experiencia laboral
-      </TitleSection>
-      <Experience />
-    </SectionContainer>
+  <Hero />
 
-    <SectionContainer id="tecnologias">
-      <TitleSection>
-        <VsCodeIcon class="size-7" />
-        Tecnologías
-      </TitleSection>
-      <TechGrid />
-    </SectionContainer>
+  <!-- Carrusel doble de tecnologías con logos oficiales de marca SVG -->
+  <section class="relative z-10 flex flex-col gap-2.5 border-y border-line/10 bg-bg/50 py-5 backdrop-blur-md overflow-hidden">
+    <Marquee items={techMarqueeRow1} speed={32} />
+    <Marquee items={techMarqueeRow2} reverse={true} speed={36} />
+  </section>
 
-    <SectionContainer id="aprendiendo">
-      <TitleSection>
-        <VsCodeIcon class="size-7" />
-        Aprendiendo...
-      </TitleSection>
-      <LearnGrid />
-    </SectionContainer>
-
-    <SectionContainer id="proyectos">
-      <TitleSection>
-        <CodeIcon class="size-7" />
-        Proyectos
-      </TitleSection>
-      <Projects />
-    </SectionContainer>
-
-    <SectionContainer id="sobre-mi">
-      <TitleSection>
-        <ProfileCheck class="size-8" />
-        Sobre mí
-      </TitleSection>
-      <AboutMe />
-    </SectionContainer>
-  </div>
-  </main>
+  <AboutMe />
+  <Experience />
+  <Projects />
+  <Stack />
+  <Contact />
 </Layout>
+
+<script>
+  import { init } from "../scripts/main"
+
+  init()
+</script>

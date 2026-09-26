@@ -1,0 +1,49 @@
+---
+---
+
+<div
+  data-loader
+  aria-hidden="true"
+  class="loader fixed inset-0 z-[200] flex flex-col justify-between overflow-hidden bg-bg px-5 py-5 sm:px-8 sm:py-7"
+>
+  <div class="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
+    <span class="flex items-center gap-2">
+      <span class="size-1.5 rounded-full bg-accent"></span>
+      Julian Quintero
+    </span>
+    <span data-loader-status class="hidden sm:block">Iniciando</span>
+  </div>
+
+  <div class="flex items-end justify-between gap-6">
+    <p class="font-display text-[clamp(2.6rem,11vw,7rem)] font-semibold leading-[0.85] tracking-tight">
+      Hola<span class="text-accent">.</span>
+    </p>
+    <p data-loader-count class="font-mono text-4xl tabular-nums text-muted sm:text-6xl">
+      000
+    </p>
+  </div>
+
+  <div class="space-y-3">
+    <div class="h-px w-full overflow-hidden bg-line/10">
+      <div data-loader-bar class="h-full w-full origin-left scale-x-0 bg-accent"></div>
+    </div>
+    <div class="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
+      <span>Desarrollador Web</span>
+      <span>Medellín, CO</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Red de seguridad: si el JS no carga, el loader desaparece solo. */
+  @keyframes loader-failsafe {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  .loader {
+    animation: loader-failsafe 0.6s linear 4s forwards;
+  }
+</style>

@@ -1,32 +1,15 @@
 ---
- const personalImageAlt = "Julian Quintero"
+import BentoAbout from "./BentoAbout.astro"
+import TitleSection from "./TitleSection.astro"
+import { about } from "@/data/site"
 ---
 
-<article class="flex flex-col items-center justify-center gap-8 text-gray-700 dark:text-gray-300 md:flex-row">
-  <div
-    class="[&>p]:mb-4 [&>p>strong]:text-yellow-500 dark:[&>p>strong]:text-yellow-100 [&>p>strong]:font-normal [&>p>strong]:font-mono text-pretty order-2 md:order-1"
-  >
-    <p>
-      Me llamo Julian Quintero. Empecé en la
-      programación hace 4 años en la universidad y de forma autodidacta. Actualmente estoy <strong
-        >Desarrollando con el equipo de Ingeneo S.A.S</strong
-      >.
-    </p>
+<section
+  id="sobre-mi"
+  data-section="sobre-mi"
+  class="relative mx-auto w-full max-w-[1400px] scroll-mt-24 px-4 py-24 sm:px-6 sm:py-32 lg:px-10 xl:max-w-[1560px]"
+>
+  <TitleSection index="01" kicker={about.kicker} title={about.title} />
 
-    <p>
-      Algunos de mis éxitos incluyen 
-      <strong>colaborar profesionalmente en el equipo de EasyFace para el desarrollo de módulos y optimización de consultas</strong
-      >. Donde también aprendi a trabajar en equipo usando metodologías ágiles como SCRUM.
-    </p>
-
-    <p>
-      Como desarrollador freelance, <strong
-        >cuento con proyectos importantes en la industria, como por ejemplo <em class="italic">Haro Epico</em> donde construí todo el proyecto desde cero</strong
-      >. Mi objetivo es consolidar mi experiencia en el campo, contribuir a soluciones innovadoras y seguir escalando profesionalmente. 
-    </p>
-  </div>
-
-  <img width="200" height="200" src="/me.webp" alt={personalImageAlt} class="order-1 object-cover w-64 h-full p-1 md:order-2 rotate-3 lg:p-2 lg:w-64 aspect-square rounded-2xl bg-black/20 dark:bg-yellow-500/5 ring-1 ring-black/70 dark:ring-white/20 " style="object-position: 50% 50%">
-
-</article>
-
+  <BentoAbout />
+</section>

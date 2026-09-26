@@ -1,0 +1,108 @@
+---
+import BrandIcon, { type BrandSlug } from "./BrandIcon.astro"
+import Vscode from "./icons/Vscode.astro"
+import { marquee, type TechItem } from "@/data/site"
+
+const SLUGS: Record<string, BrandSlug> = {
+  html: "html",
+  css: "css",
+  javascript: "javascript",
+  angular: "angular",
+  astro: "astro",
+  bootstrap: "bootstrap",
+  nextjs: "nextjs",
+  laravel: "laravel",
+  nodejs: "nodejs",
+  java: "java",
+  wordpress: "wordpress",
+  mysql: "mysql",
+  docker: "docker",
+  github: "github",
+  typescript: "typescript",
+  tailwind: "tailwind",
+  dotnet: "dotnet",
+}
+
+interface Props {
+  items?: readonly (string | TechItem)[]
+  reverse?: boolean
+  class?: string
+  speed?: number
+}
+
+const {
+  items = marquee,
+  reverse = false,
+  class: className = "",
+  speed = 32,
+} = Astro.props
+
+const isTechItem = (item: string | TechItem): item is TechItem =>
+  typeof item === "object" && item !== null && "name" in item && "icon" in item
+---
+
+<div
+  data-marquee
+  data-copies="3"
+  data-duration={speed}
+  data-direction={reverse ? "-1" : "1"}
+  class={`group/marquee relative flex overflow-hidden py-3.5 ${className}`}
+>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-y-0 left-0 z-10 w-28 bg-[linear-gradient(to_right,rgb(var(--c-bg)),transparent)]"
+  >
+  </div>
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-y-0 right-0 z-10 w-28 bg-[linear-gradient(to_left,rgb(var(--c-bg)),transparent)]"
+  >
+  </div>
+
+  <div data-marquee-track class="flex w-max items-center">
+    <div class="flex shrink-0 items-center gap-5 pr-5">
+      {
+        items.map((item) => {
+          if (isTechItem(item)) {
+            const isVscode = item.icon === "vscode"
+            return (
+              <div
+                class="group/tech flex shrink-0 items-center gap-4 rounded-full border border-line/10 bg-bg/75 py-2.5 pl-3.5 pr-6 backdrop-blur-md transition-all duration-300 hover:border-accent/60 hover:bg-bg hover:shadow-[0_4px_24px_-4px_rgb(var(--c-accent)/0.35)] hover:-translate-y-1"
+              >
+                <span class="grid size-9 shrink-0 place-items-center rounded-full bg-bg-soft transition-transform duration-300 group-hover/tech:scale-110">
+                  {isVscode ? (
+                    <Vscode class="size-5 text-muted transition-colors duration-300 group-hover/tech:text-[#007ACC]" />
+                  ) : (
+                    <BrandIcon
+                      slug={SLUGS[item.icon] ?? "javascript"}
+                      class="size-5 text-muted transition-colors duration-300 group-hover/tech:text-[var(--brand)]"
+                    />
+                  )}
+                </span>
+                <div class="flex flex-col whitespace-nowrap min-w-max">
+                  <span class="font-display text-sm font-semibold tracking-tight text-fg transition-colors duration-300 group-hover/tech:text-accent">
+                    {item.name}
+                  </span>
+                  {item.category && (
+                    <span class="font-mono text-[9.5px] uppercase tracking-[0.14em] text-muted">
+                      {item.category}
+                    </span>
+                  )}
+                </div>
+              </div>
+            )
+          }
+
+          return (
+            <span class="flex shrink-0 items-center gap-8 pr-8 font-display text-base font-semibold uppercase tracking-tight text-muted transition-colors duration-300 hover:text-fg sm:text-lg">
+              {item}
+              <span class="text-accent" aria-hidden="true">
+                ✳
+              </span>
+            </span>
+          )
+        })
+      }
+    </div>
+  </div>
+</div>
