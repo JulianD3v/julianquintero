@@ -104,7 +104,7 @@ export const techMarqueeRow1: readonly TechItem[] = [
 
 export const techMarqueeRow2: readonly TechItem[] = [
   { name: "JavaScript", icon: "javascript", category: "Language" },
-  { name: "Java", icon: "java", category: "Backend" },
+  { name: "Java - SpringBoot", icon: "java", category: "Backend" },
   { name: ".NET", icon: "dotnet", category: "Framework" },
   { name: "HTML5", icon: "html", category: "Markup" },
   { name: "CSS3", icon: "css", category: "Styling" },
